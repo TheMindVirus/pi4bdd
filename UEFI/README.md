@@ -10,7 +10,7 @@ Raspberry Pi 4 UEFI Firmware Images
 This repository contains __EXPERIMENTAL__ installable builds of the official
 [EDK2 Raspberry Pi 4 UEFI firmware](https://github.com/tianocore/edk2-platforms/tree/master/Platform/RaspberryPi/RPi4).
 
-Please see https://github.com/TheMindVirus/pftf-rpi4 four the customised source code \
+Please see https://github.com/TheMindVirus/pftf-rpi4 for the customised source code \
 for this build of UEFI (Credit: https://github.com/pftf/rpi4)
 
 # Initial Notice

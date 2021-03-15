@@ -11,7 +11,8 @@ Second Monitor Support for Pi4 running Windows 10 for ARM Insider Build 21322
 
 ## Troubleshooting
 
-Please make sure your UEFI BIOS settings are as follows:
+Press ESC at boot after Rainbow Splash to Enter UEFI BIOS Settings. \
+Please make sure your settings match the following:
 ```
 [Device Manager]
 --[Raspberry Pi Configuration]

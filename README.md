@@ -13,5 +13,25 @@ Second Monitor Support for Pi4 running Windows 10 for ARM Insider Build 21322
 
 Please make sure your UEFI BIOS settings are as follows:
 ```
-
+[Device Manager]
+--[Raspberry Pi Configuration]
+----[CPU Configuration]
+------[CPU Clock]
+--------<Custom>
+------[CPU Clock Rate (MHz)]
+--------<2000>
+----[Display Configuration]
+------<Native resolution>
+----[Advanced Configuration]
+------[Limit RAM to 3 GB]
+--------<Disabled>
+------[System Table Selection]
+--------<ACPI>
+----[SD/MMC Configuration]
+------[uSD/eMMC Routing]
+--------<Arasan SDHCI> #IMPORTANT: Selecting <eMMC2 SDHCI> may make your OS fail to boot!
+------[uSD Force Default Speed]
+--------<Allow High Speed>
+------[SD Default Speed (MHz)]
+--------<50>
 ```

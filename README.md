@@ -5,6 +5,10 @@ Second Monitor Support for Pi4 running Windows 10 for ARM Insider Build 21322
 Changing firmware and drivers may make your OS fail to boot. \
 Please use with caution! (See below for Troubleshooting)
 
+## Known Issues
+ * May cause failure to boot for a variety of reasons
+ * Black Screen at LogonUI on Windows (which may eventually resolve itself over time)
+
 ## Monitor1
 ![Monitor1](https://github.com/TheMindVirus/pi4bdd/blob/main/SCREENSHOTS/Monitor1.png)
 ## Monitor2

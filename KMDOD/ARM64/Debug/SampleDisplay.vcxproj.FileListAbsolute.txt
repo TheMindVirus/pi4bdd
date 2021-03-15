@@ -1,0 +1,2 @@
+C:\Users\Alastair\Documents\Visual Studio 2019\Projects\KMDOD\ARM64\Debug\SampleDisplay.sys
+C:\Users\Alastair\Documents\Visual Studio 2019\Projects\KMDOD\ARM64\Debug\SampleDisplay.pdb

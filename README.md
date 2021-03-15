@@ -13,7 +13,8 @@ Please use with caution! (See below for Troubleshooting)
 ## Troubleshooting
 
 When copying the UEFI folder into an existing installation, \
-Please use your existing EFI folder and take a backup of the BCD file for Windows.
+Please use your existing EFI folder and take a backup of the BCD file for Windows. \
+(This is located in `X:\EFI\Microsoft\Boot\BCD` and can be accessed with `bcdedit /store`)
 
 Press ESC at boot after Rainbow Splash to Enter UEFI BIOS Settings. \
 Please make sure your settings match the following:

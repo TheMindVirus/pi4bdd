@@ -9,6 +9,7 @@ Please use with caution! (See below for Troubleshooting)
  * May cause failure to boot for a variety of reasons (and may need multiple restarts)
  * Black Screen at LogonUI on Windows (which may eventually resolve itself over time)
  * Mailbox data access is temperamental and is best effort (a restart may help this)
+ * A lot of the DXGK code is messy and unused, (additional effort is required to clean this up)
 
 ## Monitor1
 ![Monitor1](https://github.com/TheMindVirus/pi4bdd/blob/main/SCREENSHOTS/Monitor1.png)

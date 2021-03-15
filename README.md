@@ -6,8 +6,9 @@ Changing firmware and drivers may make your OS fail to boot. \
 Please use with caution! (See below for Troubleshooting)
 
 ## Known Issues
- * May cause failure to boot for a variety of reasons
+ * May cause failure to boot for a variety of reasons (and may need multiple restarts)
  * Black Screen at LogonUI on Windows (which may eventually resolve itself over time)
+ * Mailbox data access is temperamental and is best effort (a restart may help this)
 
 ## Monitor1
 ![Monitor1](https://github.com/TheMindVirus/pi4bdd/blob/main/SCREENSHOTS/Monitor1.png)

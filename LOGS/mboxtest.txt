@@ -1,0 +1,59 @@
+[CALL]: DriverEntry
+[CALL]: DriverDeviceAdd
+[CALL]: PrepareHardware
+[CALL]: mbox_mmio_setup
+[MBOX]: mbox_base[0] | Address: 0x00000000FE00B880 | Value: 0x000000002FFEE008
+[MBOX]: mbox_base[1] | Address: 0x00000000FE00B884 | Value: 0x000000002FFEE008
+[MBOX]: mbox_base[2] | Address: 0x00000000FE00B888 | Value: 0x000000002FFEE008
+[MBOX]: mbox_base[3] | Address: 0x00000000FE00B88C | Value: 0x000000002FFEE008
+[MBOX]: mbox_base[4] | Address: 0x00000000FE00B890 | Value: 0x000000002FFEE008
+[MBOX]: mbox_base[5] | Address: 0x00000000FE00B894 | Value: 0x0000000000000001
+[MBOX]: mbox_base[6] | Address: 0x00000000FE00B898 | Value: 0x0000000040000000
+[MBOX]: mbox_base[7] | Address: 0x00000000FE00B89C | Value: 0x0000000000000401
+[MBOX]: mbox_base[8] | Address: 0x00000000FE00B8A0 | Value: 0x000000002FFEE008
+[CALL]: mbox_get_display_info
+[CALL]: mbox_set_display
+[CALL]: mbox_setup
+[MBOX]: physical = 0x000000002FFEE000
+[MBOX]: mail = 0x000000002FFEE008
+[CALL]: mbox_setup
+[MBOX]: physical = 0x000000002FFEE000
+[MBOX]: mail = 0x000000002FFEE008
+[MBOX]: dev_framebuffer1 = 0x000000003DBD4000
+[MBOX]: dev_pitchspace1 = 0x0000000000000000
+[CALL]: mbox_set_display
+[CALL]: mbox_setup
+[MBOX]: physical = 0x000000002FFEE000
+[MBOX]: mail = 0x000000002FFEE008
+[CALL]: mbox_setup
+[MBOX]: physical = 0x000000002FFEE000
+[MBOX]: mail = 0x000000002FFEE008
+[MBOX]: dev_framebuffer2 = 0x0000000000000020
+[MBOX]: dev_pitchspace2 = 0x0000000000000000
+[MBOX]: mbox_packet[0] = 0x0000000000000058
+[MBOX]: mbox_packet[1] = 0x0000000080000001
+[MBOX]: mbox_packet[2] = 0x0000000000048003
+[MBOX]: mbox_packet[3] = 0x0000000000000008
+[MBOX]: mbox_packet[4] = 0x0000000000000008
+[MBOX]: mbox_packet[5] = 0x0000000000000780
+[MBOX]: mbox_packet[6] = 0x0000000000000438
+[MBOX]: mbox_packet[7] = 0x0000000000048004
+[MBOX]: mbox_packet[8] = 0x0000000000000008
+[MBOX]: mbox_packet[9] = 0x0000000000000008
+[MBOX]: mbox_packet[10] = 0x0000000000000780
+[MBOX]: mbox_packet[11] = 0x0000000000000438
+[MBOX]: mbox_packet[12] = 0x0000000000040001
+[MBOX]: mbox_packet[13] = 0x0000000000000008
+[MBOX]: mbox_packet[14] = 0x0000000000000008
+[MBOX]: mbox_packet[15] = 0x0000000000000020
+[MBOX]: mbox_packet[16] = 0x0000000000000000
+[MBOX]: mbox_packet[17] = 0x0000000000040008
+[MBOX]: mbox_packet[18] = 0x0000000000000004
+[MBOX]: mbox_packet[19] = 0x0000000000000004
+[MBOX]: mbox_packet[20] = 0x0000000000000000
+[MBOX]: mbox_packet[21] = 0x0000000000000000
+[CALL]: PowerUp
+[CALL]: PowerDown
+[CALL]: ReleaseHardware
+[CALL]: mbox_mmio_cleanup
+[CALL]: DriverUnload

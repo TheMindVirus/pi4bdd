@@ -1,0 +1,2 @@
+C:\Users\Alastair\Documents\Visual Studio 2019\Projects\mboxtest\ARM64\Debug\mboxtest.sys
+C:\Users\Alastair\Documents\Visual Studio 2019\Projects\mboxtest\ARM64\Debug\mboxtest.pdb

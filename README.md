@@ -12,6 +12,7 @@ Please use with caution! (See below for Troubleshooting)
  * A lot of the DXGK code is messy and unused, (additional effort is required to clean this up)
  * The driver currently only supports 1080p ARGB 32bpp at variable refresh rate \
    (This is due to a lot of properties being hard coded in the KMDOD sample driver)
+ * On some monitors you may experience visual glitches (due to formatting and timing errors)
 
 ## Monitor1
 ![Monitor1](https://github.com/TheMindVirus/pi4bdd/blob/main/SCREENSHOTS/Monitor1.png)

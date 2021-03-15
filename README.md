@@ -1,7 +1,7 @@
 # pi4bdd
 Second Monitor Support for Pi4 running Windows 10 for ARM Insider Build 21322
 
-### WARNING: Changing firmware and drivers may in rare cases make your OS fail to boot.
+### WARNING: Changing firmware and drivers may make your OS fail to boot.
 ### Please use with caution! (See below for Troubleshooting)
 
 ## Monitor1

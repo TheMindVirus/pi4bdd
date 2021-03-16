@@ -37,7 +37,7 @@ Please make sure your settings match the following:
 ------[CPU Clock Rate (MHz)]
 --------<2000>
 ----[Display Configuration]
-------<Native resolution>
+------<Native resolution> #NOTE: Selecting 1080p may either work or may cause display overspill
 ----[Advanced Configuration]
 ------[Limit RAM to 3 GB]
 --------<Disabled> #NOTE: Setting this limit to <Enabled> has worked for some people
@@ -45,7 +45,7 @@ Please make sure your settings match the following:
 --------<ACPI>
 ----[SD/MMC Configuration]
 ------[uSD/eMMC Routing]
---------<Arasan SDHCI> #IMPORTANT: Select <eMMC2 SDHCI> only if you have an eMMC2 OS driver installed
+--------<Arasan SDHCI> #NOTE: Select <eMMC2 SDHCI> only if you have an eMMC2 OS driver installed
 ------[uSD Force Default Speed]
 --------<Allow High Speed>
 ------[SD Default Speed (MHz)]

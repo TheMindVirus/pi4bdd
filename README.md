@@ -45,7 +45,7 @@ Please make sure your settings match the following:
 --------<ACPI>
 ----[SD/MMC Configuration]
 ------[uSD/eMMC Routing]
---------<Arasan SDHCI> #IMPORTANT: Selecting <eMMC2 SDHCI> may make your OS fail to boot!
+--------<Arasan SDHCI> #IMPORTANT: Select <eMMC2 SDHCI> only if you have an eMMC2 OS driver installed
 ------[uSD Force Default Speed]
 --------<Allow High Speed>
 ------[SD Default Speed (MHz)]

@@ -40,7 +40,7 @@ Please make sure your settings match the following:
 ------<Native resolution>
 ----[Advanced Configuration]
 ------[Limit RAM to 3 GB]
---------<Disabled> # #NOTE: Setting this limit to <Enabled> has worked for some people
+--------<Disabled> #NOTE: Setting this limit to <Enabled> has worked for some people
 ------[System Table Selection]
 --------<ACPI>
 ----[SD/MMC Configuration]

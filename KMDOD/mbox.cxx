@@ -55,10 +55,7 @@ VALUE mbox_setup(BYTE channel)
     debug("[MBOX]: physical = 0x%016llX", MmGetPhysicalAddress(mbox_packet).QuadPart);
     debug("[MBOX]: mail = 0x%016llX", mail);
 
-    KSPIN_LOCK lock = NULL;
-    KIRQL prevState = NULL;
-    KeInitializeSpinLock(&lock);
-    KeAcquireSpinLock(&lock, &prevState);
+    KeEnterCriticalRegion();
 
     mmio_write(mbox_base, MBOX_READ, 0x00000000);
     mmio_write(mbox_base, 1, 0x00000000);
@@ -110,10 +107,10 @@ VALUE mbox_setup(BYTE channel)
     }
 
 success:
-    KeReleaseSpinLock(&lock, prevState);
+    KeLeaveCriticalRegion();
     return MBOX_SUCCESS;
 failure:
-    KeReleaseSpinLock(&lock, prevState);
+    KeLeaveCriticalRegion();
     return MBOX_FAILURE;
 }
 

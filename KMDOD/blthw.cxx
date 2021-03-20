@@ -440,6 +440,8 @@ void HwExecutePresentDisplayOnly(HANDLE Context)
         SrcBltInfo.Height = DstBltInfo.Height;
     }
 
+    KeEnterCriticalRegion();
+
     // Copy all the scroll rects from source image to video frame buffer.
     for (UINT i = 0; i < ctx->NumMoves; i++)
     {
@@ -462,9 +464,11 @@ void HwExecutePresentDisplayOnly(HANDLE Context)
     // Unmap unmap and unlock the pages.
     if (ctx->Mdl)
     {
-        MmUnlockPages(ctx->Mdl);
+        MmUnlockPages(ctx->Mdl); ///!!! Unlock and Free without Lock and Allocate may cause PAGE_FAULT_IN_NON_PAGED_AREA BSOD/GSOD
         IoFreeMdl(ctx->Mdl);
     }
+
+    KeLeaveCriticalRegion();
 
     if(ctx->SynchExecution)
     {

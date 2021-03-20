@@ -1,1 +1,2 @@
 C:\Users\Alastair\Documents\Visual Studio 2019\Projects\KMDOD\ARM64\Release\SampleDisplay.sys
+C:\Users\Alastair\Documents\GitHub\pi4bdd\KMDOD\ARM64\Release\SampleDisplay.sys

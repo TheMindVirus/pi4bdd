@@ -1,5 +1,6 @@
 # pi4bdd
-Second Monitor Support for Pi4 running Windows 10 for ARM Insider Build 21322
+Second Monitor Support for Pi4 running Windows 10 for ARM Insider Build 21322 \
+Build output available at: https://github.com/TheMindVirus/pi4bdd/tree/main/KMDOD/ARM64/Release/SampleDisplay
 
 ## WARNING!
 Changing firmware and drivers may make your OS fail to boot. \

@@ -1,0 +1,2 @@
+C:\Users\Alastair\Desktop\pi4bdd\KMDOD\ARM64\Debug\SampleDisplay.sys
+C:\Users\Alastair\Documents\Visual Studio 2019\Projects\pi4bdd\KMDOD\ARM64\Debug\SampleDisplay.sys

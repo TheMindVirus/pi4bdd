@@ -6,6 +6,9 @@ Build output available at: https://github.com/TheMindVirus/pi4bdd/tree/main/KMDO
 Changing firmware and drivers may make your OS fail to boot. \
 Please use with caution! (See below for Troubleshooting)
 
+## Multi-Source-Mode Support
+![Monitor2](https://github.com/TheMindVirus/pi4bdd/blob/pi4bdd-dev/SCREENSHOTS/MultiSourceMode.png)
+
 ## Known Issues
  * May cause failure to boot for a variety of reasons (and may need multiple restarts)
  * Black Screen at LogonUI on Windows (which may eventually resolve itself over time)

@@ -85,7 +85,8 @@ NTSTATUS BASIC_DISPLAY_DRIVER::RecommendMonitorModes(_In_ CONST DXGKARG_RECOMMEN
     // This is always called to recommend modes for the monitor. The sample driver doesn't provide EDID for a monitor, so 
     // the OS prefills the list with default monitor modes. Since the required mode might not be in the list, it should 
     // be provided as a recommended mode.
-    return AddSingleMonitorMode(pRecommendMonitorModes);
+    AddSingleMonitorMode(pRecommendMonitorModes);
+    return STATUS_SUCCESS;
 }
 
 // Tell DMM about all the modes, etc. that are supported
@@ -686,10 +687,32 @@ NTSTATUS BASIC_DISPLAY_DRIVER::SetSourceModeAndPath(CONST D3DKMDT_VIDPN_SOURCE_M
     debug("[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::SetSourceModeAndPath");
     CURRENT_BDD_MODE* pCurrentBddMode = &m_CurrentModes[pPath->VidPnSourceId];
     NTSTATUS Status = STATUS_SUCCESS;
+
     pCurrentBddMode->Scaling = pPath->ContentTransformation.Scaling;
     pCurrentBddMode->SrcModeWidth = pSourceMode->Format.Graphics.PrimSurfSize.cx;
     pCurrentBddMode->SrcModeHeight = pSourceMode->Format.Graphics.PrimSurfSize.cy;
     pCurrentBddMode->Rotation = pPath->ContentTransformation.Rotation;
+
+    //NOT OBVIOUS! Entry Point for Monitor Settings Update ///!!!NOTE
+    mbox_mmio_setup();
+    dev_width2 = pCurrentBddMode->DispInfo.Width; //1920; // <-- TEMPORARY SOLUTION
+    dev_height2 = pCurrentBddMode->DispInfo.Height; //1080; // <-- TEMPORARY SOLUTION
+    mbox_get_display_info();
+
+    mbox_set_display(1);
+    BOOLEAN b = (BOOLEAN)mbox_get_vsync();
+    debug("[MBOX]: mbox_get_vsync() = %s", b ? "true" : "false");
+    b = false;
+    mbox_set_vsync(true);
+    b = (BOOLEAN)mbox_get_vsync();
+    debug("[MBOX]: mbox_set_vsync() = %s", b ? "true" : "false");
+    mbox_set_display(0);
+
+    debug("[MBOX]: dev_pitchspace2 = 0x%016llX", dev_pitchspace2);
+    pCurrentBddMode->DispInfo.PhysicAddress.QuadPart = dev_framebuffer2;
+    pCurrentBddMode->DispInfo.Pitch = dev_pitchspace2; // 0x1E00 reported by the mailbox may cause STATUS_GRAPHICS_INVALID_STRIDE (0xC01E033C)
+    m_CurrentModes[0].DispInfo.ColorFormat = D3DDDIFMT_A8R8G8B8;
+    /////////////////////////////////////////////////////////////////
 
     if (!pCurrentBddMode->Flags.DoNotMapOrUnmap)
     {
@@ -800,7 +823,8 @@ struct SampleSourceMode
 
 // The driver will advertise all modes that fit within the actual required mode (see AddSingleSourceMode below)
 //const static SampleSourceMode C_SampleSourceMode[] = {{800,600},{1024,768},{1152,864},{1280,800},{1280,1024},{1400,1050},{1600,1200},{1680,1050},{1920,1200}}; // <-- UTTER RUBBISH
-const static SampleSourceMode C_SampleSourceMode[] = {{1920,1080}}; // <-- ALSO UTTER RUBBISH
+//const static SampleSourceMode C_SampleSourceMode[] = {{1920,1080}}; // <-- ALSO UTTER RUBBISH
+const static SampleSourceMode C_SampleSourceMode[] = { {640,480},{800,600},{1024,768},{1152,864},{1280,800},{1280,1024},{1400,1050},{1600,1200},{1680,1050},{1920,1080},{1920,1200} }; // <<<<----EVEN MORE UTTER RUBBISH____.....
 const static UINT C_SampleSourceModeMax = sizeof(C_SampleSourceMode)/sizeof(C_SampleSourceMode[0]);
 
 NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMODESET_INTERFACE* pVidPnSourceModeSetInterface,
@@ -811,8 +835,8 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
 
     // There is only one source format supported by display-only drivers, but more can be added in a 
     // full WDDM driver if the hardware supports them
-    // for (UINT PelFmtIdx = 0; PelFmtIdx < ARRAYSIZE(gBddPixelFormats); ++PelFmtIdx)
-    // {
+    for (UINT PelFmtIdx = 0; PelFmtIdx < ARRAYSIZE(gBddPixelFormats); ++PelFmtIdx)
+    {
         // Create new mode info that will be populated
         D3DKMDT_VIDPN_SOURCE_MODE* pVidPnSourceModeInfo = NULL;
         NTSTATUS Status = pVidPnSourceModeSetInterface->pfnCreateNewModeInfo(hVidPnSourceModeSet, &pVidPnSourceModeInfo);
@@ -835,7 +859,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
         pVidPnSourceModeInfo->Format.Graphics.Stride = m_CurrentModes[SourceId].DispInfo.Pitch;
         debug("[INFO]: Pitch: %u (0x%04X)", m_CurrentModes[SourceId].DispInfo.Pitch, m_CurrentModes[SourceId].DispInfo.Pitch);
         debug("[INFO]: Stride: %u (0x%04X)", pVidPnSourceModeInfo->Format.Graphics.Stride, pVidPnSourceModeInfo->Format.Graphics.Stride);
-        pVidPnSourceModeInfo->Format.Graphics.PixelFormat = m_CurrentModes[SourceId].DispInfo.ColorFormat; //gBddPixelFormats[PelFmtIdx]; // <-- NONSENSE.
+        pVidPnSourceModeInfo->Format.Graphics.PixelFormat = gBddPixelFormats[PelFmtIdx]; // <-- NONSENSE.
         pVidPnSourceModeInfo->Format.Graphics.ColorBasis = D3DKMDT_CB_SCRGB;
         pVidPnSourceModeInfo->Format.Graphics.PixelValueAccessMode = D3DKMDT_PVAM_DIRECT;
 
@@ -854,16 +878,19 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
                 return Status;
             }
         }
-    // }
+    }
 
-    // UINT WidthMax = m_CurrentModes[SourceId].DispInfo.Width;
-    // UINT HeightMax = m_CurrentModes[SourceId].DispInfo.Height;
+    UINT WidthMax = m_CurrentModes[SourceId].DispInfo.Width;
+    UINT HeightMax = m_CurrentModes[SourceId].DispInfo.Height;
+    UNREFERENCED_PARAMETER(WidthMax);
+    UNREFERENCED_PARAMETER(HeightMax);
 
     // Add all predefined modes that fit within the bounds of the required (POST) mode
     
-    // for (UINT ModeIndex = 0; ModeIndex < C_SampleSourceModeMax; ++ModeIndex)
-    // {
-        /*if (C_SampleSourceMode[ModeIndex].ModeWidth > WidthMax)
+    for (UINT ModeIndex = 0; ModeIndex < C_SampleSourceModeMax; ++ModeIndex)
+    {
+        /*
+        if (C_SampleSourceMode[ModeIndex].ModeWidth > WidthMax)
         {
             break;
         }
@@ -884,13 +911,13 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
         */
         // There is only one source format supported by display-only drivers, but more can be added in a 
         // full WDDM driver if the hardware supports them
-        //for (UINT PelFmtIdx = 0; PelFmtIdx < ARRAYSIZE(gBddPixelFormats); ++PelFmtIdx)
-        //{
+        for (UINT PelFmtIdx = 0; PelFmtIdx < ARRAYSIZE(gBddPixelFormats); ++PelFmtIdx)
+        {
             // Create new mode info that will be populated
             //D3DKMDT_VIDPN_SOURCE_MODE* pVidPnSourceModeInfo = NULL;
             //NTSTATUS Status = pVidPnSourceModeSetInterface->pfnCreateNewModeInfo(hVidPnSourceModeSet, &pVidPnSourceModeInfo);
             D3DKMDT_VIDPN_SOURCE_MODE* pVidPnSourceModeInfo2 = NULL;
-            Status = pVidPnSourceModeSetInterface->pfnCreateNewModeInfo(hVidPnSourceModeSet, &pVidPnSourceModeInfo2);
+            NTSTATUS Status = pVidPnSourceModeSetInterface->pfnCreateNewModeInfo(hVidPnSourceModeSet, &pVidPnSourceModeInfo2);
             if (!NT_SUCCESS(Status))
             {
                 // If failed to create a new mode info, continuing to the next mode and trying again isn't going to be at all helpful, so return
@@ -902,11 +929,11 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
             // Populate mode info with values from mode at ModeIndex and hard-coded values
             // Always report 32 bpp format, this will be color converted during the present if the mode at ModeIndex was < 32bpp
             pVidPnSourceModeInfo2->Type = D3DKMDT_RMT_GRAPHICS;
-            pVidPnSourceModeInfo2->Format.Graphics.PrimSurfSize.cx = m_CurrentModes[SourceId].DispInfo.Width; //C_SampleSourceMode[ModeIndex].ModeWidth; // <-- GIBBERISH
-            pVidPnSourceModeInfo2->Format.Graphics.PrimSurfSize.cy = m_CurrentModes[SourceId].DispInfo.Height; //C_SampleSourceMode[ModeIndex].ModeHeight; // <-- GIBBERISH
+            pVidPnSourceModeInfo2->Format.Graphics.PrimSurfSize.cx = C_SampleSourceMode[ModeIndex].ModeWidth; // <-- GIBBERISH
+            pVidPnSourceModeInfo2->Format.Graphics.PrimSurfSize.cy = C_SampleSourceMode[ModeIndex].ModeHeight; // <-- GIBBERISH
             pVidPnSourceModeInfo2->Format.Graphics.VisibleRegionSize = pVidPnSourceModeInfo2->Format.Graphics.PrimSurfSize;
-            pVidPnSourceModeInfo2->Format.Graphics.Stride = m_CurrentModes[SourceId].DispInfo.Pitch; //4*C_SampleSourceMode[ModeIndex].ModeWidth; // <-- TEMPORARY SOLUTION
-            pVidPnSourceModeInfo2->Format.Graphics.PixelFormat = m_CurrentModes[SourceId].DispInfo.ColorFormat; //gBddPixelFormats[PelFmtIdx]; // <-- TEMPORARY SOLUTION
+            pVidPnSourceModeInfo2->Format.Graphics.Stride = 4*C_SampleSourceMode[ModeIndex].ModeWidth; // <-- TEMPORARY SOLUTION
+            pVidPnSourceModeInfo2->Format.Graphics.PixelFormat = gBddPixelFormats[PelFmtIdx]; // <-- TEMPORARY SOLUTION
             pVidPnSourceModeInfo2->Format.Graphics.ColorBasis = D3DKMDT_CB_SCRGB;
             pVidPnSourceModeInfo2->Format.Graphics.PixelValueAccessMode = D3DKMDT_PVAM_DIRECT;
 
@@ -923,8 +950,8 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
                 Status = pVidPnSourceModeSetInterface->pfnReleaseModeInfo(hVidPnSourceModeSet, pVidPnSourceModeInfo2);
                 if (!(NT_SUCCESS(Status))) { debug("[ASRT]: (pVidPnSourceModeInfo) | NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode"); return STATUS_ABANDONED; }
             }
-        //}
-    //}
+        }
+    }
     return STATUS_SUCCESS;
 }
 

@@ -301,13 +301,16 @@ VOID CopyBitsGeneric(
  * Logic to decide which of the above functions to call based on Rotation/BPP
  *
 \**************************************************************************/
-VOID BltBits(
+VOID BltBits
+(
     BLT_INFO* pDst,
     CONST BLT_INFO* pSrc,
     UINT  NumRects,
-    _In_reads_(NumRects) CONST RECT *pRects)
+    _In_reads_(NumRects) CONST RECT *pRects
+)
 {
     debug("[CALL]: VOID BltBits");
+    KeEnterGuardedRegion();
     // pSrc->pBits might be coming from user-mode. User-mode addresses when accessed by kernel need to be protected by a __try/__except.
     // This usage is redundant in the sample driver since it is already being used for MmProbeAndLockPages. However, it is very important
     // to have this in place and to make sure developers don't miss it, it is in these two locations.
@@ -331,4 +334,5 @@ VOID BltBits(
     {
         debug("[WARN]: Either dst (0x%016llX) or src (0x%016llX) bits encountered exception during access.", pDst->pBits, pSrc->pBits);
     }
+    KeLeaveGuardedRegion();
 }

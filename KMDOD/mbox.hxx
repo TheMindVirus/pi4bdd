@@ -11,6 +11,7 @@
 #define ADDRESS   unsigned long long   //64-bit
 #define VALUE           unsigned int   //32-bit
 #define BYTE           unsigned char   // 8-bit
+#define BUFFER            BYTE REFER   // 8-bit buffer
 #define ELEMENT       volatile VALUE   //no-cache
 #define POINTER        ELEMENT REFER   //no-cache pointer
 #define MAILBOX        VALUE PACK(4)   //4-byte aligned mailbox element
@@ -45,9 +46,15 @@ STATIC PULONG   mbox_packet;
 
 STATIC ADDRESS   dev_framebuffer1;
 STATIC VALUE     dev_pitchspace1;
+//STATIC BUFFER    dev_edid1;        ///!!!EDID Reported by HDMI0 from Mailbox is Blank or Temperamental
+STATIC VALUE     dev_width1;
+STATIC VALUE     dev_height1;
 
 STATIC ADDRESS   dev_framebuffer2;
 STATIC VALUE     dev_pitchspace2;
+//STATIC BUFFER    dev_edid2;        ///!!!EDID Reported by HDMI1 from Mailbox is Blank or Temperamental
+STATIC VALUE     dev_width2;
+STATIC VALUE     dev_height2;
 
 //=====================[Macros from PiX-iES]========================
 
@@ -66,6 +73,8 @@ void mbox_mmio_cleanup();
 
 VALUE mbox_setup(BYTE channel);
 void mbox_set_display(VALUE display);
+VALUE mbox_get_vsync();
+void mbox_set_vsync(VALUE enabled);
 void mbox_get_display_info();
 
 //==================================================================

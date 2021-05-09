@@ -1,15 +1,22 @@
 ﻿  Building 'SampleDisplay' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
   Stamping ARM64\Release\sampledisplay.inf
-  Stamping [Version] section with DriverVer=03/20/2021,9.21.0000.0000
+  Stamping [Version] section with DriverVer=05/09/2021,9.21.0000.0000
+  BDD.cxx
+  BDD_DDI.cxx
+  BDD_DMM.cxx
+  BDD_Util.cxx
+  BltFuncs.cxx
   BltHw.cxx
+  mbox.cxx
+  memory.cxx
   Generating code
   Finished generating code
-  SampleDisplay.vcxproj -> C:\Users\Alastair\Documents\GitHub\pi4bdd\KMDOD\ARM64\Release\SampleDisplay.sys
+  SampleDisplay.vcxproj -> C:\Users\Alastair\Documents\Visual Studio 2019\Projects\pi4bdd\KMDOD\ARM64\Release\SampleDisplay.sys
   Done Adding Additional Store
-  Successfully signed: C:\Users\Alastair\Documents\GitHub\pi4bdd\KMDOD\ARM64\Release\SampleDisplay.sys
+  Successfully signed: C:\Users\Alastair\Documents\Visual Studio 2019\Projects\pi4bdd\KMDOD\ARM64\Release\SampleDisplay.sys
   
   Driver is 'Universal'.
-  .........................
+  ........................
   Signability test complete.
   
   Errors:
@@ -19,7 +26,7 @@
   None
   
   Catalog generation complete.
-  C:\Users\Alastair\Documents\GitHub\pi4bdd\KMDOD\ARM64\Release\SampleDisplay\sampledisplay.cat
+  C:\Users\Alastair\Documents\Visual Studio 2019\Projects\pi4bdd\KMDOD\ARM64\Release\SampleDisplay\sampledisplay.cat
   Done Adding Additional Store
   Successfully signed: ARM64\Release\SampleDisplay\sampledisplay.cat
   

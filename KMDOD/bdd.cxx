@@ -42,11 +42,23 @@ NTSTATUS BASIC_DISPLAY_DRIVER::StartDevice
     m_CurrentModes[0].DispInfo.TargetId = D3DDDI_ID_UNINITIALIZED; // <-- ???
 
     // Get device information from OS.
+    RegisterHWInfo();
+
     mbox_mmio_setup();
+    dev_width2 =  m_CurrentModes[0].DispInfo.Width; //1920; // <-- TEMPORARY SOLUTION
+    dev_height2 = m_CurrentModes[0].DispInfo.Height; //1080; // <-- TEMPORARY SOLUTION
     mbox_get_display_info();
+    
+    mbox_set_display(1);
+    BOOLEAN b = (BOOLEAN)mbox_get_vsync();
+    debug("[MBOX]: mbox_get_vsync() = %s", b ? "true" : "false");
+    b = false;
+    mbox_set_vsync(true);
+    b = (BOOLEAN)mbox_get_vsync();
+    debug("[MBOX]: mbox_set_vsync() = %s", b ? "true" : "false");
+    mbox_set_display(0);
+
     debug("[MBOX]: dev_pitchspace2 = 0x%016llX", dev_pitchspace2);
-    m_CurrentModes[0].DispInfo.Width = 1920; // <-- TEMPORARY SOLUTION
-    m_CurrentModes[0].DispInfo.Height = 1080; // <-- TEMPORARY SOLUTION
     m_CurrentModes[0].DispInfo.PhysicAddress.QuadPart = dev_framebuffer2;
     m_CurrentModes[0].DispInfo.Pitch = dev_pitchspace2; // 0x1E00 reported by the mailbox may cause STATUS_GRAPHICS_INVALID_STRIDE (0xC01E033C)
     m_CurrentModes[0].DispInfo.ColorFormat = D3DDDIFMT_A8R8G8B8;
@@ -590,10 +602,10 @@ NTSTATUS BASIC_DISPLAY_DRIVER::RegisterHWInfo()
     debug("[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::RegisterHWInfo");
     NTSTATUS Status;
     // TODO: Replace these strings with proper information
-    PCSTR StrHWInfoChipType = "Replace with the chip name";
-    PCSTR StrHWInfoDacType = "Replace with the DAC name or identifier (ID)";
-    PCSTR StrHWInfoAdapterString = "Replace with the name of the adapter";
-    PCSTR StrHWInfoBiosString = "Replace with information about the BIOS";
+    PCSTR StrHWInfoChipType = "Broadcom VideoCore IV";
+    PCSTR StrHWInfoDacType = "PixelValve (CRTC)";
+    PCSTR StrHWInfoAdapterString = "Raspberry Pi 4 Basic Display Driver";
+    PCSTR StrHWInfoBiosString = "Raspberry Pi 4 Basic Display Driver";
     HANDLE DevInstRegKeyHandle;
     Status = IoOpenDeviceRegistryKey(m_pPhysicalDevice, PLUGPLAY_REGKEY_DRIVER, KEY_SET_VALUE, &DevInstRegKeyHandle);
     if (!NT_SUCCESS(Status))

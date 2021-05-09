@@ -7,9 +7,13 @@ PULONG    mbox_packet = NULL;
 
 ADDRESS   dev_framebuffer1 = NULL;
 VALUE     dev_pitchspace1 = 0;
+VALUE     dev_width1 = 1920;
+VALUE     dev_height1 = 1080;
 
 ADDRESS   dev_framebuffer2 = NULL;
 VALUE     dev_pitchspace2 = 0;
+VALUE     dev_width2 = 1920;
+VALUE     dev_height2 = 1080;
 
 //=====================[MMIO port from PiX-iES]=====================
 
@@ -55,6 +59,7 @@ VALUE mbox_setup(BYTE channel)
     debug("[MBOX]: physical = 0x%016llX", MmGetPhysicalAddress(mbox_packet).QuadPart);
     debug("[MBOX]: mail = 0x%016llX", mail);
 
+    //KeEnterGuardedRegion();
     KeEnterCriticalRegion();
 
     mmio_write(mbox_base, MBOX_READ, 0x00000000);
@@ -63,9 +68,13 @@ VALUE mbox_setup(BYTE channel)
     mmio_write(mbox_base, 3, 0x00000000);
     mmio_write(mbox_base, MBOX_POLL, 0x00000000);
     mmio_write(mbox_base, MBOX_SENDER, 0x00000000);
-    //mmio_write(mbox_base, MBOX_STATUS, 0x00000000);
+    //mmio_write(mbox_base, MBOX_STATUS, 0x40000000);
     mmio_write(mbox_base, MBOX_CONFIG, 0x00000400); // <-- may be all that's required
-    //mmio_write(mbox_base, MBOX_WRITE,  0x00000000);
+    mmio_write(mbox_base, MBOX_WRITE,  0x00000000);
+
+    //mmio_write(mbox_base, MBOX_POLL, 0x00000001);
+    //mmio_write(mbox_base, MBOX_CONFIG, 0x00000401);
+
     KeStallExecutionProcessor(MBOX_TIMEOUT);
 
     for (size_t i = 0; i < (MBOX_SIZE / 4); ++i)
@@ -107,11 +116,35 @@ VALUE mbox_setup(BYTE channel)
     }
 
 success:
+    //KeLeaveGuardedRegion();
     KeLeaveCriticalRegion();
     return MBOX_SUCCESS;
 failure:
+    //KeLeaveGuardedRegion();
     KeLeaveCriticalRegion();
     return MBOX_FAILURE;
+}
+
+VALUE mbox_get_num_displays()
+{
+    debug("[CALL]: void mbox_get_num_displays");
+    VALUE i = 1;
+    VALUE a = 0;
+    VALUE retval = 0;
+
+    mbox_packet[i++] = MBOX_REQUEST; //Mailbox Request
+
+    mbox_packet[i++] = 0x00040013;   //MBOX_TAG_GET_DISPLAY_NUM
+    mbox_packet[i++] = 4;            //Data Length (bytes)
+    mbox_packet[i++] = 4;            //Data Length (again)
+a=i;mbox_packet[i++] = 0;            //Value
+
+    mbox_packet[i++] = 0;            //End Mark
+    mbox_packet[0] = i * 4;          //Update Packet Size
+
+    if (MBOX_SUCCESS != mbox_setup(8)) { retval = mbox_packet[a]; }
+    else { debug("[WARN]: Mailbox Transaction Error"); }
+    return retval;
 }
 
 void mbox_set_display(VALUE display)
@@ -125,6 +158,46 @@ void mbox_set_display(VALUE display)
     mbox_packet[i++] = 4;            //Data Length (bytes)
     mbox_packet[i++] = 4;            //Data Length (again)
     mbox_packet[i++] = display;      //Value
+
+    mbox_packet[i++] = 0;            //End Mark
+    mbox_packet[0] = i * 4;          //Update Packet Size
+
+    if (MBOX_SUCCESS != mbox_setup(8)) { debug("[WARN]: Mailbox Transaction Error"); }
+}
+
+VALUE mbox_get_vsync()
+{
+    debug("[CALL]: VALUE mbox_get_vsync");
+    VALUE i = 1;
+    VALUE a = 0;
+    VALUE retval = 0;
+
+    mbox_packet[i++] = MBOX_REQUEST; //Mailbox Request
+
+    mbox_packet[i++] = 0x0004000e;   //MBOX_TAG_GET_VSYNC
+    mbox_packet[i++] = 4;            //Data Length (bytes)
+    mbox_packet[i++] = 4;            //Data Length (again)
+a=i;mbox_packet[i++] = 0;            //Value
+
+    mbox_packet[i++] = 0;            //End Mark
+    mbox_packet[0] = i * 4;          //Update Packet Size
+
+    if (MBOX_SUCCESS == mbox_setup(8)) { retval = mbox_packet[a]; }
+    else { debug("[WARN]: Mailbox Transaction Error"); }
+    return retval;
+}
+
+void mbox_set_vsync(VALUE enabled)
+{
+    debug("[CALL]: void mbox_set_vsync");
+    VALUE i = 1;
+
+    mbox_packet[i++] = MBOX_REQUEST; //Mailbox Request
+
+    mbox_packet[i++] = 0x0004800e;   //MBOX_TAG_SET_VSYNC
+    mbox_packet[i++] = 4;            //Data Length (bytes)
+    mbox_packet[i++] = 4;            //Data Length (again)
+    mbox_packet[i++] = enabled;      //Value
 
     mbox_packet[i++] = 0;            //End Mark
     mbox_packet[0] = i * 4;          //Update Packet Size
@@ -147,14 +220,14 @@ void mbox_get_display_info()
     mbox_packet[i++] = 0x00048003;   //MBOX_TAG_SET_FB_PGEOM
     mbox_packet[i++] = 8;            //Data Length (bytes)
     mbox_packet[i++] = 8;            //Data Length (again)
-    mbox_packet[i++] = 1920;         //Value // <-- TEMPORARY SOLUTION
-    mbox_packet[i++] = 1080;         //Value // <-- TEMPORARY SOLUTION
+    mbox_packet[i++] = dev_width1;   //Value // <-- TEMPORARY SOLUTION
+    mbox_packet[i++] = dev_height1;  //Value // <-- TEMPORARY SOLUTION
 
     mbox_packet[i++] = 0x00048004;   //MBOX_TAG_SET_FB_VGEOM
     mbox_packet[i++] = 8;            //Data Length (bytes)
     mbox_packet[i++] = 8;            //Data Length (again)
-    mbox_packet[i++] = 1920;         //Value // <-- TEMPORARY SOLUTION
-    mbox_packet[i++] = 1080;         //Value // <-- TEMPORARY SOLUTION
+    mbox_packet[i++] = dev_width1;   //Value // <-- TEMPORARY SOLUTION
+    mbox_packet[i++] = dev_height1;  //Value // <-- TEMPORARY SOLUTION
 
     mbox_packet[i++] = 0x00040001;   //MBOX_TAG_ALLOC_FB
     mbox_packet[i++] = 8;            //Data Length (bytes)
@@ -186,14 +259,14 @@ b=i;mbox_packet[i++] = 0;            //Value
     mbox_packet[i++] = 0x00048003;   //MBOX_TAG_SET_FB_PGEOM
     mbox_packet[i++] = 8;            //Data Length (bytes)
     mbox_packet[i++] = 8;            //Data Length (again)
-    mbox_packet[i++] = 1920;         //Value // <-- TEMPORARY SOLUTION
-    mbox_packet[i++] = 1080;         //Value // <-- TEMPORARY SOLUTION
+    mbox_packet[i++] = dev_width2;   //Value // <-- TEMPORARY SOLUTION
+    mbox_packet[i++] = dev_height2;  //Value // <-- TEMPORARY SOLUTION
 
     mbox_packet[i++] = 0x00048004;   //MBOX_TAG_SET_FB_VGEOM
     mbox_packet[i++] = 8;            //Data Length (bytes)
     mbox_packet[i++] = 8;            //Data Length (again)
-    mbox_packet[i++] = 1920;         //Value // <-- TEMPORARY SOLUTION
-    mbox_packet[i++] = 1080;         //Value // <-- TEMPORARY SOLUTION
+    mbox_packet[i++] = dev_width2;   //Value // <-- TEMPORARY SOLUTION
+    mbox_packet[i++] = dev_height2;  //Value // <-- TEMPORARY SOLUTION
 
     mbox_packet[i++] = 0x00040001;   //MBOX_TAG_ALLOC_FB
     mbox_packet[i++] = 8;            //Data Length (bytes)

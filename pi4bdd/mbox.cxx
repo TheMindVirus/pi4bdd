@@ -114,7 +114,7 @@ VALUE mbox_setup(BYTE channel)
         }
 
         checked = mbox_read();
-        if (mail == checked) { return MBOX_SUCCESS; }
+        if (mail == checked) { KeFlushIoBuffers(mbox_middle, TRUE, TRUE); return MBOX_SUCCESS; }
 
         ++t3; if (t3 > MBOX_RETRIES) { return MBOX_FAILURE; }
     }

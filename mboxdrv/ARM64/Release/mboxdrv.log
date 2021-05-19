@@ -1,6 +1,6 @@
 ﻿  Building 'mboxdrv' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
   Stamping ARM64\Release\mboxdrv.inf
-  Stamping [Version] section with DriverVer=05/19/2021,18.41.42.651
+  Stamping [Version] section with DriverVer=05/19/2021,19.25.40.52
   mboxdrv.cxx
   mbox.cxx
   Generating code

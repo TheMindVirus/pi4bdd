@@ -126,7 +126,7 @@ unsigned int mailbox_setup(unsigned char Channel)
         }
 
         checked = mailbox_read();
-        if (mail == checked) { return MAILBOX_SUCCESS; }
+        if (mail == checked) { KeFlushIoBuffers(MailboxMDL, TRUE, TRUE); return MAILBOX_SUCCESS; }
         
         ++t3; if (t3 > MAILBOX_RETRIES) { return MAILBOX_FAILURE; }
     }
@@ -148,7 +148,6 @@ a=i;MailboxPacket[i++] = 0;          //Value
 
     if (MAILBOX_SUCCESS != mailbox_setup(8)) { debug("[WARN]: Mailbox Transaction Error"); }
 
-    KeFlushIoBuffers(MailboxMDL, TRUE, TRUE); //Move to Success of mailbox_setup
     for (unsigned int j = 0; j < i; ++j)
     {
         debug("[MBOX]: MailboxPacket[%d] | Value: 0x%08lX", j, MailboxPacket[j]);

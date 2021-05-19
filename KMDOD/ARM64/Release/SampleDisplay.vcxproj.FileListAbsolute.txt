@@ -1,1 +1,0 @@
-C:\Users\Alastair\Documents\Visual Studio 2019\Projects\pi4bdd\KMDOD\ARM64\Release\SampleDisplay.sys

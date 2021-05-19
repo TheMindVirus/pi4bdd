@@ -1,0 +1,26 @@
+﻿  Building 'mboxdrv' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping ARM64\Release\mboxdrv.inf
+  Stamping [Version] section with DriverVer=05/19/2021,18.41.42.651
+  mboxdrv.cxx
+  mbox.cxx
+  Generating code
+  Finished generating code
+  mboxdrv.vcxproj -> C:\Users\Alastair\Documents\GitHub\pi4bdd2\mboxdrv\ARM64\Release\mboxdrv.sys
+  Done Adding Additional Store
+  Successfully signed: C:\Users\Alastair\Documents\GitHub\pi4bdd2\mboxdrv\ARM64\Release\mboxdrv.sys
+  
+  Driver is 'Universal'.
+  ........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  C:\Users\Alastair\Documents\GitHub\pi4bdd2\mboxdrv\ARM64\Release\mboxdrv\mboxdrv.cat
+  Done Adding Additional Store
+  Successfully signed: C:\Users\Alastair\Documents\GitHub\pi4bdd2\mboxdrv\ARM64\Release\mboxdrv\mboxdrv.cat
+  

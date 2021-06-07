@@ -18,10 +18,10 @@
 #define MBOX_COUNT                                       4   // Number of Mailboxes present
 #define MBOX_TESTS                                       3   // Re-runs
 
-#define MBOX0_BASE                  (PI_PERI_BASE + 0xB880)  // Mailbox1Handle 0x0
-#define MBOX1_BASE                  (PI_PERI_BASE + 0xB980)  // Mailbox2Handle 0x0
-#define MBOX2_BASE                  (PI_PERI_BASE + 0xBA80)  // Mailbox3Handle 0x0
-#define MBOX3_BASE                  (PI_PERI_BASE + 0xBB80)  // Mailbox4Handle 0x0
+#define MBOX0_BASE                  (PI_PERI_BASE + 0xB880)  // MailboxHandle[0] 0x0
+#define MBOX1_BASE                  (PI_PERI_BASE + 0xB980)  // MailboxHandle[1] 0x0
+#define MBOX2_BASE                  (PI_PERI_BASE + 0xBA80)  // MailboxHandle[2] 0x0
+#define MBOX3_BASE                  (PI_PERI_BASE + 0xBB80)  // MailboxHandle[3] 0x0
 
 #define MBOX_READ                                        0   // 0x00
 #define MBOX_PEEK                                        4   // 0x10
@@ -37,6 +37,7 @@
 #define MBOX_RETRIES                                 65535   // times
 #define MBOX_TIMEOUT                                   100   // microseconds
 
+#define MBOX_REQUEST                            0x00000000
 #define MBOX_EMPTY                              0x40000000
 #define MBOX_FULL                               0x80000000
 #define MBOX_FAILURE                            0x80000001
@@ -70,23 +71,23 @@ void main(void)
 
     for (size_t i = 0; i < MBOX_COUNT; ++i)
     {
-        // Map MailboxHandles
+        // Map MailboxHandle
         base.QuadPart = bases[i];
         MailboxHandle[i] = (PULONG)MmMapIoSpace(base, MBOX_SIZE, MmNonCached);
         if (!MailboxHandle[i]) { debug("[WARN]: Failed to Map MailboxHandle[%llu]", i); return; }
 
-        // Allocate MailboxPackets
-        base.QuadPart = MBOX_MAX;
-        MailboxPacket[i] = (PULONG)MmAllocateContiguousMemory(MBOX_SIZE, base);
-        if (!MailboxPacket[i]) { debug("[WARN]: Failed to Allocate MailboxPacket[%llu]", i); return; }
-        for (size_t j = 0; j < (MBOX_SIZE / 4); ++j) { MailboxPacket[i][j] = 0; }
-
-        // Allocate MailboxMDLs
+        // Allocate MailboxMDL
         lowest.QuadPart = 0x0;
         highest.QuadPart = MBOX_MAX;
         skipbytes.QuadPart = 0x0;
         MailboxMDL[i] = MmAllocatePagesForMdlEx(lowest, highest, skipbytes, MBOX_MTU, MmNonCached, MM_ALLOCATE_REQUIRE_CONTIGUOUS_CHUNKS);
         if (!MailboxMDL[i]) { debug("[WARN]: Failed to Allocate MailboxMDL[%llu]", i); return; }
+
+        // Allocate MailboxPacket
+        base.QuadPart = MBOX_MAX;
+        MailboxPacket[i] = (PULONG)MmAllocateContiguousMemory(MBOX_MTU, base);
+        if (!MailboxPacket[i]) { debug("[WARN]: Failed to Allocate MailboxPacket[%llu]", i); return; }
+        for (size_t j = 0; j < (MBOX_MTU / 4); ++j) { MailboxPacket[i][j] = 0; }
     }
 
     for (size_t i = 0; i < MBOX_COUNT; ++i)
@@ -94,6 +95,7 @@ void main(void)
         // Test Mailbox Memory
         for (size_t j = 0; j < MBOX_TESTS; ++j)
         {
+            for (size_t k = 0; k < (MBOX_MTU / 4); ++k) { MailboxPacket[i][k] = 0; }
             mbox_get_mon_info(i);
             debug("[STAT]: Mailbox: %llu | Test: %llu | t1 = %d | t2 = %d | t3 = %d |", i, j, t1, t2, t3);
         }
@@ -121,10 +123,7 @@ unsigned int mbox_setup(size_t Mailbox, unsigned char Channel)
     t2 = 0;
     t3 = 0;
 
-    for (int i = 0; i <= MBOX_CONFIG2; ++i)
-    {
-        mmio_write(MailboxHandle[Mailbox], i, 0x0);
-    }
+    for (size_t i = 0; i <= MBOX_CONFIG2; ++i) { mmio_write(MailboxHandle[Mailbox], i, 0x0); }
     mmio_write(MailboxHandle[Mailbox], MBOX_CONFIG, MBOX_DEFCONFIG);
     mmio_write(MailboxHandle[Mailbox], MBOX_CONFIG2, MBOX_DEFCONFIG2);
     mmio_write(MailboxHandle[Mailbox], MBOX_READ, 0x0);
@@ -155,7 +154,6 @@ unsigned int mbox_setup(size_t Mailbox, unsigned char Channel)
 
         checked = mbox_read(MailboxHandle[Mailbox]);
         if (mail == checked) { KeFlushIoBuffers(MailboxMDL[Mailbox], TRUE, TRUE); return MBOX_SUCCESS; }
-        
         ++t3; if (t3 > MBOX_RETRIES) { return MBOX_FAILURE; }
     }
 }
@@ -164,16 +162,16 @@ void mbox_get_mon_info(size_t Mailbox)
 {
     unsigned int i = 1;
     unsigned int a = 0;
-    MailboxPacket[Mailbox][i++] = 0;          // Mailbox Request
+    MailboxPacket[Mailbox][i++] = MBOX_REQUEST;   // Mailbox Request
 
-    MailboxPacket[Mailbox][i++] = 0x00040013; // MBOX_TAG_GET_NUM_DISPLAYS
-    MailboxPacket[Mailbox][i++] = 4;          // Buffer Length
-    MailboxPacket[Mailbox][i++] = 4;          // Data Length
-a=i;MailboxPacket[Mailbox][i++] = 0;          // Value
+    MailboxPacket[Mailbox][i++] = 0x00040013;     // MBOX_TAG_GET_NUM_DISPLAYS
+    MailboxPacket[Mailbox][i++] = 4;              // Buffer Length
+    MailboxPacket[Mailbox][i++] = 4;              // Data Length
+a=i;MailboxPacket[Mailbox][i++] = 0;              // Value
 
-    MailboxPacket[Mailbox][i++] = 0;          // End Mark
-    MailboxPacket[Mailbox][0] = i * 4;        // Update Packet Size
-
+    MailboxPacket[Mailbox][i++] = 0;              // End Mark
+    MailboxPacket[Mailbox][0] = i * 4;            // Update Packet Size
+    
     if (MBOX_SUCCESS != mbox_setup(Mailbox, 8)) { debug("[WARN]: Mailbox Transaction Error"); }
 
     for (size_t j = 0; j < i; ++j)

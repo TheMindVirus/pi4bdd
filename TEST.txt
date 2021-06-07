@@ -1,9 +1,25 @@
+Connected to Windows 10 21337 ARM 64-bit (AArch64) target at (Mon Jun  7 21:14:53.934 2021 (UTC + 1:00)), ptr64 TRUE
+Kernel Debugger connection established.
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*
+Symbol search path is: srv*
+Executable search path is: 
+Windows 10 Kernel Version 21337 MP (1 procs) Free ARM 64-bit (AArch64)
+Edition build lab: 21337.1000.arm64fre.rs_prerelease.210312-1502
+Machine Name:
+Kernel base = 0xfffff801`e3600000 PsLoadedModuleList = 0xfffff801`e422a860
+System Uptime: 0 days 0:00:00.000
+The target has requested that the debugger execute a command: !amli err 0xc 0000000000000001 0000000000000003 0000000000000000 0000000000000000;g
+The target has requested that the debugger execute a command: !amli err 0xc 0000000000000001 0000000000000003 0000000000000000 0000000000000000;g
+KDTARGET: Refreshing KD connection
 [CALL]: DriverEntry
 [CALL]: DriverDeviceAdd
 [CALL]: DevicePrepareHardware
 [CALL]: main
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFF008
+[MBOX]: mail = 0x2FEFD008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b880 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b884 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b888 | Value: 0x00000000
@@ -12,12 +28,12 @@
 [MBOX]: MailboxHandle[5] | Address: 0x00000000fe00b894 | Value: 0x00000000
 [MBOX]: MailboxHandle[6] | Address: 0x00000000fe00b898 | Value: 0x00000001
 [MBOX]: MailboxHandle[7] | Address: 0x00000000fe00b89c | Value: 0x00000000
-[MBOX]: MailboxHandle[8] | Address: 0x00000000fe00b8a0 | Value: 0x2FED5008
-[MBOX]: MailboxHandle[9] | Address: 0x00000000fe00b8a4 | Value: 0x2FED5008
-[MBOX]: MailboxHandle[10] | Address: 0x00000000fe00b8a8 | Value: 0x2FED5008
-[MBOX]: MailboxHandle[11] | Address: 0x00000000fe00b8ac | Value: 0x2FED5008
-[MBOX]: MailboxHandle[12] | Address: 0x00000000fe00b8b0 | Value: 0x2FED5008
-[MBOX]: MailboxHandle[13] | Address: 0x00000000fe00b8b4 | Value: 0x00000002
+[MBOX]: MailboxHandle[8] | Address: 0x00000000fe00b8a0 | Value: 0xEA753008
+[MBOX]: MailboxHandle[9] | Address: 0x00000000fe00b8a4 | Value: 0xEA753008
+[MBOX]: MailboxHandle[10] | Address: 0x00000000fe00b8a8 | Value: 0xEA753008
+[MBOX]: MailboxHandle[11] | Address: 0x00000000fe00b8ac | Value: 0xEA753008
+[MBOX]: MailboxHandle[12] | Address: 0x00000000fe00b8b0 | Value: 0xEA753008
+[MBOX]: MailboxHandle[13] | Address: 0x00000000fe00b8b4 | Value: 0x00000000
 [MBOX]: MailboxHandle[14] | Address: 0x00000000fe00b8b8 | Value: 0x40000000
 [MBOX]: MailboxHandle[15] | Address: 0x00000000fe00b8bc | Value: 0x00000501
 [MBOX]: MailboxHandle[16] | Address: 0x00000000fe00b8c0 | Value: 0x00000000
@@ -31,7 +47,7 @@
 [MBOX]: MailboxPacket[0][6] | Value: 0x00000000
 [STAT]: Mailbox: 0 | Test: 0 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFF008
+[MBOX]: mail = 0x2FEFD008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b880 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b884 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b888 | Value: 0x00000000
@@ -59,7 +75,7 @@
 [MBOX]: MailboxPacket[0][6] | Value: 0x00000000
 [STAT]: Mailbox: 0 | Test: 1 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFF008
+[MBOX]: mail = 0x2FEFD008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b880 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b884 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b888 | Value: 0x00000000
@@ -87,7 +103,7 @@
 [MBOX]: MailboxPacket[0][6] | Value: 0x00000000
 [STAT]: Mailbox: 0 | Test: 2 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFD008
+[MBOX]: mail = 0x2FEFB008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b980 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b984 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b988 | Value: 0x00000000
@@ -115,7 +131,7 @@
 [MBOX]: MailboxPacket[1][6] | Value: 0x00000000
 [STAT]: Mailbox: 1 | Test: 0 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFD008
+[MBOX]: mail = 0x2FEFB008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b980 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b984 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b988 | Value: 0x00000000
@@ -143,7 +159,7 @@
 [MBOX]: MailboxPacket[1][6] | Value: 0x00000000
 [STAT]: Mailbox: 1 | Test: 1 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFD008
+[MBOX]: mail = 0x2FEFB008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b980 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b984 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b988 | Value: 0x00000000
@@ -171,7 +187,7 @@
 [MBOX]: MailboxPacket[1][6] | Value: 0x00000000
 [STAT]: Mailbox: 1 | Test: 2 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFB008
+[MBOX]: mail = 0x2FEF9008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00ba80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00ba84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00ba88 | Value: 0x00000000
@@ -199,7 +215,7 @@
 [MBOX]: MailboxPacket[2][6] | Value: 0x00000000
 [STAT]: Mailbox: 2 | Test: 0 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFB008
+[MBOX]: mail = 0x2FEF9008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00ba80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00ba84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00ba88 | Value: 0x00000000
@@ -227,7 +243,7 @@
 [MBOX]: MailboxPacket[2][6] | Value: 0x00000000
 [STAT]: Mailbox: 2 | Test: 1 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFB008
+[MBOX]: mail = 0x2FEF9008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00ba80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00ba84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00ba88 | Value: 0x00000000
@@ -255,7 +271,7 @@
 [MBOX]: MailboxPacket[2][6] | Value: 0x00000000
 [STAT]: Mailbox: 2 | Test: 2 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEF9008
+[MBOX]: mail = 0x2FEF7008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00bb80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00bb84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00bb88 | Value: 0x00000000
@@ -283,7 +299,7 @@
 [MBOX]: MailboxPacket[3][6] | Value: 0x00000000
 [STAT]: Mailbox: 3 | Test: 0 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEF9008
+[MBOX]: mail = 0x2FEF7008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00bb80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00bb84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00bb88 | Value: 0x00000000
@@ -311,7 +327,7 @@
 [MBOX]: MailboxPacket[3][6] | Value: 0x00000000
 [STAT]: Mailbox: 3 | Test: 1 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEF9008
+[MBOX]: mail = 0x2FEF7008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00bb80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00bb84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00bb88 | Value: 0x00000000
@@ -347,7 +363,7 @@
 [CALL]: DevicePrepareHardware
 [CALL]: main
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFF008
+[MBOX]: mail = 0x2FEFD008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b880 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b884 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b888 | Value: 0x00000000
@@ -373,9 +389,9 @@
 [MBOX]: MailboxPacket[0][4] | Value: 0x80000004
 [MBOX]: MailboxPacket[0][5] | Value: 0x00000002
 [MBOX]: MailboxPacket[0][6] | Value: 0x00000000
-[STAT]: Mailbox: 0 | Test: 0 | t1 = 0 | t2 = 7 | t3 = 1 |
+[STAT]: Mailbox: 0 | Test: 0 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFF008
+[MBOX]: mail = 0x2FEFD008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b880 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b884 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b888 | Value: 0x00000000
@@ -403,7 +419,7 @@
 [MBOX]: MailboxPacket[0][6] | Value: 0x00000000
 [STAT]: Mailbox: 0 | Test: 1 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFF008
+[MBOX]: mail = 0x2FEFD008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b880 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b884 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b888 | Value: 0x00000000
@@ -431,7 +447,7 @@
 [MBOX]: MailboxPacket[0][6] | Value: 0x00000000
 [STAT]: Mailbox: 0 | Test: 2 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFD008
+[MBOX]: mail = 0x2FEFB008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b980 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b984 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b988 | Value: 0x00000000
@@ -459,7 +475,7 @@
 [MBOX]: MailboxPacket[1][6] | Value: 0x00000000
 [STAT]: Mailbox: 1 | Test: 0 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFD008
+[MBOX]: mail = 0x2FEFB008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b980 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b984 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b988 | Value: 0x00000000
@@ -487,7 +503,7 @@
 [MBOX]: MailboxPacket[1][6] | Value: 0x00000000
 [STAT]: Mailbox: 1 | Test: 1 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFD008
+[MBOX]: mail = 0x2FEFB008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00b980 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00b984 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00b988 | Value: 0x00000000
@@ -513,9 +529,9 @@
 [MBOX]: MailboxPacket[1][4] | Value: 0x80000004
 [MBOX]: MailboxPacket[1][5] | Value: 0x00000002
 [MBOX]: MailboxPacket[1][6] | Value: 0x00000000
-[STAT]: Mailbox: 1 | Test: 2 | t1 = 0 | t2 = 2 | t3 = 1 |
+[STAT]: Mailbox: 1 | Test: 2 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFB008
+[MBOX]: mail = 0x2FEF9008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00ba80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00ba84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00ba88 | Value: 0x00000000
@@ -543,7 +559,7 @@
 [MBOX]: MailboxPacket[2][6] | Value: 0x00000000
 [STAT]: Mailbox: 2 | Test: 0 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFB008
+[MBOX]: mail = 0x2FEF9008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00ba80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00ba84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00ba88 | Value: 0x00000000
@@ -571,7 +587,7 @@
 [MBOX]: MailboxPacket[2][6] | Value: 0x00000000
 [STAT]: Mailbox: 2 | Test: 1 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEFB008
+[MBOX]: mail = 0x2FEF9008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00ba80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00ba84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00ba88 | Value: 0x00000000
@@ -599,7 +615,7 @@
 [MBOX]: MailboxPacket[2][6] | Value: 0x00000000
 [STAT]: Mailbox: 2 | Test: 2 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEF9008
+[MBOX]: mail = 0x2FEF7008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00bb80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00bb84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00bb88 | Value: 0x00000000
@@ -627,7 +643,7 @@
 [MBOX]: MailboxPacket[3][6] | Value: 0x00000000
 [STAT]: Mailbox: 3 | Test: 0 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEF9008
+[MBOX]: mail = 0x2FEF7008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00bb80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00bb84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00bb88 | Value: 0x00000000
@@ -655,7 +671,7 @@
 [MBOX]: MailboxPacket[3][6] | Value: 0x00000000
 [STAT]: Mailbox: 3 | Test: 1 | t1 = 0 | t2 = 0 | t3 = 1 |
 [CALL]: mbox_setup
-[MBOX]: mail = 0x2FEF9008
+[MBOX]: mail = 0x2FEF7008
 [MBOX]: MailboxHandle[0] | Address: 0x00000000fe00bb80 | Value: 0x00000000
 [MBOX]: MailboxHandle[1] | Address: 0x00000000fe00bb84 | Value: 0x00000000
 [MBOX]: MailboxHandle[2] | Address: 0x00000000fe00bb88 | Value: 0x00000000

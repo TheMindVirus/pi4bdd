@@ -3,7 +3,7 @@ Signature = "$Windows NT$"
 Class = Sample
 ClassGuid = {78A1C341-4539-11d3-B88D-00C04FAD5171}
 Provider = %ProviderName%
-DriverVer = 06/07/2021,12.59.55.158
+DriverVer = 06/07/2021,21.13.38.603
 CatalogFile = %DriverName%.cat
 PnpLockdown = 1
 

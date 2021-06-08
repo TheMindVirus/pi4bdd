@@ -77,7 +77,7 @@ NTSTATUS StartHwBltPresentWorkerThread
     _In_ _When_(return==0, __drv_aliasesMem) PVOID StartContext
 )
 {
-    debug("[CALL]: NTSTATUS StartHwBltPresentWorkerThread");
+    //debug("[CALL]: NTSTATUS StartHwBltPresentWorkerThread");
     OBJECT_ATTRIBUTES ObjectAttributes;
     InitializeObjectAttributes(&ObjectAttributes, NULL, OBJ_KERNEL_HANDLE, NULL, NULL);
     HANDLE hWorkerThread = NULL;
@@ -120,7 +120,7 @@ BDD_HWBLT::BDD_HWBLT()
     m_hPresentWorkerThread(NULL),
     m_pPresentWorkerThread(NULL)
 {
-    debug("[CALL]: BDD_HWBLT::BDD_HWBLT");
+    //debug("[CALL]: BDD_HWBLT::BDD_HWBLT");
     KeInitializeEvent(&m_hThreadStartupEvent, NotificationEvent, FALSE);
     KeInitializeEvent(&m_hThreadSuspendEvent, SynchronizationEvent, FALSE);
 }
@@ -141,7 +141,7 @@ BDD_HWBLT::~BDD_HWBLT()
 #pragma warning(disable:26135) // The function doesn't lock anything
 void BDD_HWBLT::SetPresentWorkerThreadInfo(HANDLE hWorkerThread)
 {
-    debug("[CALL]: void BDD_HWBLT::SetPresentWorkerThreadInfo");
+    //debug("[CALL]: void BDD_HWBLT::SetPresentWorkerThreadInfo");
     if (m_pPresentWorkerThread)
     {
         // Wait for thread to exit
@@ -206,7 +206,7 @@ NTSTATUS BDD_HWBLT::ExecutePresentDisplayOnly
 
 --*/
 {
-    debug("[CALL]: NTSTATUS BDD_HWBLT::ExecutePresentDisplayOnly");
+    //debug("[CALL]: NTSTATUS BDD_HWBLT::ExecutePresentDisplayOnly");
     NTSTATUS Status = STATUS_SUCCESS;
 
     SIZE_T sizeMoves = NumMoves*sizeof(D3DKMT_MOVE_RECT);
@@ -346,7 +346,7 @@ void ReportPresentProgress
 
 --*/
 {
-    debug("[CALL]: void ReportPresentProgress"); ///!!!ReportPresentProgress Bug
+    //debug("[CALL]: void ReportPresentProgress"); ///!!!ReportPresentProgress Bug
     BASIC_DISPLAY_DRIVER* pDevExt = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(Adapter);
 
     SYNC_NOTIFY_INTERRUPT SyncNotifyInterrupt = {};
@@ -385,12 +385,12 @@ void ReportPresentProgress
     // this is an acceptable condition
     SyncNotifyInterrupt.DxgkInterface->DxgkCbQueueDpc(SyncNotifyInterrupt.DxgkInterface->DeviceHandle);
     //NT_ASSERT(bRet);
-    debug("[INFO]: Interrupt Routine and DPC Complete");
+    //debug("[INFO]: Interrupt Routine and DPC Complete");
 }
 
 void HwContextWorkerThread(HANDLE Context)
 {
-    debug("[CALL]: void HwContextWorkerThread");
+    //debug("[CALL]: void HwContextWorkerThread");
     DoPresentMemory* ctx = reinterpret_cast<DoPresentMemory*>(Context);
     BDD_HWBLT* displaySource = ctx->DisplaySource;
 
@@ -406,7 +406,7 @@ void HwContextWorkerThread(HANDLE Context)
 //The routine executes present's commands and report progress to the OS
 void HwExecutePresentDisplayOnly(HANDLE Context)
 {
-    debug("[CALL]: void HwExecutePresentDisplayOnly");
+    //debug("[CALL]: void HwExecutePresentDisplayOnly");
     DoPresentMemory* ctx = reinterpret_cast<DoPresentMemory*>(Context);
 
     // Set up destination blt info

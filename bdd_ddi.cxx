@@ -267,7 +267,7 @@ NTSTATUS APIENTRY BddDdiPresentDisplayOnly
     _In_ CONST DXGKARG_PRESENT_DISPLAYONLY* pPresentDisplayOnly
 )
 {
-    debug("[CALL]: NTSTATUS APIENTRY BddDdiPresentDisplayOnly");
+    //debug("[CALL]: NTSTATUS APIENTRY BddDdiPresentDisplayOnly");
     if (!(hAdapter != NULL)) { debug("[ASRT]: (hAdapter = NULL) | NTSTATUS APIENTRY BddDdiPresentDisplayOnly"); return STATUS_ABANDONED; }
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
@@ -455,7 +455,7 @@ VOID BddDdiDpcRoutine
     _In_  VOID* pDeviceContext
 )
 {
-    debug("[CALL]: VOID BddDdiDpcRoutine");
+    //debug("[CALL]: VOID BddDdiDpcRoutine");
     if (!(pDeviceContext != NULL)) { debug("[ASRT]: (pDeviceContext = NULL) | VOID BddDdiDpcRoutine"); return; }
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
     if (!pBDD->IsDriverActive())

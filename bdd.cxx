@@ -45,11 +45,13 @@ NTSTATUS BASIC_DISPLAY_DRIVER::StartDevice
     //RegisterHWInfo();
 
     mbox_mmio_setup();
-    mbox_get_num_displays();
+    dev_width2 = 1920; // <-- TEMPORARY SOLUTION
+    dev_height2 = 1080; // <-- TEMPORARY SOLUTION
     mbox_get_display_info();
     debug("[MBOX]: dev_framebuffer2 = 0x%016llX", dev_framebuffer2);
     debug("[MBOX]: dev_pitchspace2 = 0x%016llX", dev_pitchspace2);
-    if (dev_framebuffer2 == 0x20) { debug("[WARN]: Malformed Mailbox Data. Start again, Microsoft.", dev_framebuffer2); goto failure; }
+    if (dev_framebuffer2 == 0x20) { KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[WARN]: Malformed Mailbox Data. Start again, Microsoft.\n")); goto failure; }
+    else { KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "[INFO]: (V)\n")); }
     m_CurrentModes[0].DispInfo.Width = 1920; // <-- TEMPORARY SOLUTION
     m_CurrentModes[0].DispInfo.Height = 1080; // <-- TEMPORARY SOLUTION
     m_CurrentModes[0].DispInfo.PhysicAddress.QuadPart = dev_framebuffer2;
@@ -432,13 +434,13 @@ NTSTATUS BASIC_DISPLAY_DRIVER::SetPointerShape(_In_ CONST DXGKARG_SETPOINTERSHAP
 
 NTSTATUS BASIC_DISPLAY_DRIVER::PresentDisplayOnly(_In_ CONST DXGKARG_PRESENT_DISPLAYONLY* pPresentDisplayOnly)
 {
-    debug("[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::PresentDisplayOnly");
+    //debug("[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::PresentDisplayOnly");
     if (!(pPresentDisplayOnly != NULL)) { debug("[ASRT]: (pPresentDisplayOnly = NULL) | NTSTATUS BASIC_DISPLAY_DRIVER::PresentDisplayOnly"); return STATUS_ABANDONED; }
     if (!(pPresentDisplayOnly->VidPnSourceId < MAX_VIEWS)) { debug("[ASRT]: (pPresentDisplayOnly->VidPnSourceId >= MAX_VIEWS) | NTSTATUS BASIC_DISPLAY_DRIVER::PresentDisplayOnly"); return STATUS_ABANDONED; }
     if (pPresentDisplayOnly->BytesPerPixel < MIN_BYTES_PER_PIXEL_REPORTED)
     {
         // Only >=32bpp modes are reported, therefore this Present should never pass anything less than 4 bytes per pixel
-        debug("[WARN]: pPresentDisplayOnly->BytesPerPixel is 0x%016llX, which is lower than the allowed.", pPresentDisplayOnly->BytesPerPixel);
+        //debug("[WARN]: pPresentDisplayOnly->BytesPerPixel is 0x%016llX, which is lower than the allowed.", pPresentDisplayOnly->BytesPerPixel);
         return STATUS_INVALID_PARAMETER;
     }
     // If it is in monitor off state or source is not supposed to be visible, don't present anything to the screen
@@ -679,7 +681,7 @@ D3DDDI_VIDEO_PRESENT_SOURCE_ID BASIC_DISPLAY_DRIVER::FindSourceForTarget(D3DDDI_
 
 VOID BASIC_DISPLAY_DRIVER::DpcRoutine(VOID)
 {
-    debug("[CALL]: VOID BASIC_DISPLAY_DRIVER::DpcRoutine");
+    //debug("[CALL]: VOID BASIC_DISPLAY_DRIVER::DpcRoutine");
     m_DxgkInterface.DxgkCbNotifyDpc((HANDLE)m_DxgkInterface.DeviceHandle);
 }
 

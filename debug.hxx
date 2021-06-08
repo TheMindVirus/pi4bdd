@@ -9,10 +9,10 @@
 #define DEBUG_FILEROOT   L"\\SystemRoot\\"
 #endif//DEBUG_FILEROOT
 
-#ifdef NDEBUG
-#define debug(...)
+#ifdef DBG
+#define debug(...)   KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, __VA_ARGS__)); KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "\n")); //KeStallExecutionProcessor(10000); //DebugLogToFile(__VA_ARGS__);
 #else
-#define debug(...)   DebugLogToFile(__VA_ARGS__);
+#define debug(...)   KeStallExecutionProcessor(10000); //Potential fix for timing issues in Release builds
 
 static BOOLEAN _DebugOverwrite = TRUE;
 

@@ -75,7 +75,7 @@ VALUE mbox_setup(BYTE channel)
     debug("[CALL]: VALUE mbox_setup");
     if ((!mbox_handle) || (!mbox_middle) || (!mbox_packet)) { debug("[MBOX]: Lock-up in Sector 7G"); return MBOX_FAILURE; }
 
-    KeEnterCriticalRegion();
+    //KeEnterCriticalRegion();
 
     VALUE checked = 0;
     VALUE mail = (((VALUE)MmGetPhysicalAddress(mbox_packet).QuadPart) & ~0xF) | (channel & 0xF); // 0xF reserved for 4-bit channel // <--Needs to be a physical address so the VC knows where it is
@@ -121,11 +121,11 @@ VALUE mbox_setup(BYTE channel)
     }
 
 failure:
-    KeLeaveCriticalRegion();
+    //KeLeaveCriticalRegion();
     return MBOX_FAILURE;
 success:
     KeFlushIoBuffers(mbox_middle, TRUE, TRUE);
-    KeLeaveCriticalRegion();
+    //KeLeaveCriticalRegion();
     return MBOX_SUCCESS;
 }
 
@@ -170,7 +170,7 @@ void mbox_get_display_info()
     debug("[CALL]: void mbox_get_display_info");
     VALUE i = 1;
     VALUE a = 0;
-    VALUE b = 0;
+    //VALUE b = 0;
 
     mbox_set_display(1);
     mbox_packet[i++] = MBOX_REQUEST; // Mailbox Request Header
@@ -192,21 +192,21 @@ void mbox_get_display_info()
     mbox_packet[i++] = 8;            // Data Length (again)
 a=i;mbox_packet[i++] = 32;           // Value // Alignment
     mbox_packet[i++] = 0;            // Value
-
+    /*
     mbox_packet[i++] = 0x00040008;   // MBOX_TAG_GET_FB_LINELENGTH
     mbox_packet[i++] = 4;            // Data Length (bytes)
     mbox_packet[i++] = 4;            // Data Length (again)
 b=i;mbox_packet[i++] = 0;            // Value
-
+*/
     mbox_packet[i++] = 0;            // End Mark
     mbox_packet[0] = i * 4;          // Update Packet Size
 
     if (MBOX_SUCCESS == mbox_setup(8))
     {
         dev_framebuffer2 = mbox_packet[a] & 0x3FFFFFFF; // Translate from VC to ARM address
-        dev_pitchspace2 = mbox_packet[b];
-        debug("[MBOX]: dev_framebuffer2 = 0x%016llX", dev_framebuffer2);
-        debug("[MBOX]: dev_pitchspace2 = 0x%016llX", dev_pitchspace2);
+       // dev_pitchspace2 = mbox_packet[b];
+       // debug("[MBOX]: dev_framebuffer2 = 0x%016llX", dev_framebuffer2);
+       // debug("[MBOX]: dev_pitchspace2 = 0x%016llX", dev_pitchspace2);
     }
     else { debug("[WARN]: Mailbox Transaction Error"); }
 

@@ -66,7 +66,7 @@ VOID CopyBits32_32(
     UINT  NumRects,
     _In_reads_(NumRects) CONST RECT *pRects)
 {
-    debug("[CALL]: VOID CopyBits32_32");
+    //debug("[CALL]: VOID CopyBits32_32");
     NT_ASSERT((pDst->BitsPerPel == 32) &&
               (pSrc->BitsPerPel == 32));
     NT_ASSERT((pDst->Rotation == D3DKMDT_VPPR_IDENTITY) &&
@@ -101,7 +101,7 @@ VOID CopyBits32_32(
 
 VOID GetPitches(_In_ CONST BLT_INFO* pBltInfo, _Out_ LONG* pPixelPitch, _Out_ LONG* pRowPitch)
 {
-    debug("[CALL]: VOID GetPitches");
+    //debug("[CALL]: VOID GetPitches");
     switch (pBltInfo->Rotation)
     {
         case D3DKMDT_VPPR_IDENTITY:
@@ -140,7 +140,7 @@ VOID GetPitches(_In_ CONST BLT_INFO* pBltInfo, _Out_ LONG* pPixelPitch, _Out_ LO
 
 BYTE* GetRowStart(_In_ CONST BLT_INFO* pBltInfo, CONST RECT* pRect)
 {
-    debug("[CALL]: BYTE* GetRowStart");
+    //debug("[CALL]: BYTE* GetRowStart");
     BYTE* pRet = NULL;
     LONG OffLeft = pRect->left + pBltInfo->Offset.x;
     LONG OffTop = pRect->top + pBltInfo->Offset.y;
@@ -208,7 +208,7 @@ VOID CopyBitsGeneric(
     UINT  NumRects,
     _In_reads_(NumRects) CONST RECT *pRects)
 {
-    debug("[CALL]: VOID CopyBitsGeneric");
+    //debug("[CALL]: VOID CopyBitsGeneric");
     LONG DstPixelPitch = 0;
     LONG DstRowPitch = 0;
     LONG SrcPixelPitch = 0;
@@ -309,7 +309,7 @@ VOID BltBits
     _In_reads_(NumRects) CONST RECT *pRects
 )
 {
-    debug("[CALL]: VOID BltBits");
+    //debug("[CALL]: VOID BltBits");
     KeEnterGuardedRegion();
     // pSrc->pBits might be coming from user-mode. User-mode addresses when accessed by kernel need to be protected by a __try/__except.
     // This usage is redundant in the sample driver since it is already being used for MmProbeAndLockPages. However, it is very important

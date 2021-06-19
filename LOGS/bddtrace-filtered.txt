@@ -1,0 +1,169 @@
+
+Microsoft (R) Windows Debugger Version 10.0.21306.1007 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+Opened \\.\com5
+Waiting to reconnect...
+Connected to Windows 10 21337 ARM 64-bit (AArch64) target at (Mon Apr  5 21:23:41.707 2021 (UTC + 1:00)), ptr64 TRUE
+Kernel Debugger connection established.
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*
+Symbol search path is: srv*
+Executable search path is: 
+Windows 10 Kernel Version 21337 MP (4 procs) Free ARM 64-bit (AArch64)
+Product: WinNt, suite: TerminalServer SingleUserTS
+Edition build lab: 21337.1000.arm64fre.rs_prerelease.210312-1502
+Machine Name:
+Kernel base = 0xfffff802`76000000 PsLoadedModuleList = 0xfffff802`76c2a860
+Debug session time: Mon Apr  5 21:23:37.339 2021 (UTC + 1:00)
+System Uptime: 5 days 3:08:43.082
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+nt!DbgBreakPointWithStatus:
+fffff802`76207570 d43e0000 brk         #0xF000
+0: kd> g
+[CALL]: extern "C" NTSTATUS DriverEntry
+[CALL]: NTSTATUS BddDdiAddDevice
+[CALL]: BDD_HWBLT::BDD_HWBLT
+[CALL]: BASIC_DISPLAY_DRIVER::BASIC_DISPLAY_DRIVER
+[CALL]: NTSTATUS APIENTRY BddDdiQueryAdapterInfo
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::QueryAdapterInfo
+[CALL]: NTSTATUS BddDdiStartDevice
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::StartDevice
+[CALL]: void mbox_mmio_setup
+[CALL]: void mbox_get_display_info
+[CALL]: void mbox_set_display
+[CALL]: VALUE mbox_setup
+[MBOX]: physical = 0x000000002FEFD000
+[MBOX]: mail = 0x000000002FEFD008
+[MBOX]: mbox_base[0] | Address: 0x00000000FE00B880 | Value: 0x0000000000000000
+[MBOX]: mbox_base[1] | Address: 0x00000000FE00B884 | Value: 0x0000000000000000
+[MBOX]: mbox_base[2] | Address: 0x00000000FE00B888 | Value: 0x0000000000000000
+[MBOX]: mbox_base[3] | Address: 0x00000000FE00B88C | Value: 0x0000000000000000
+[MBOX]: mbox_base[4] | Address: 0x00000000FE00B890 | Value: 0x0000000000000000
+[MBOX]: mbox_base[5] | Address: 0x00000000FE00B894 | Value: 0x0000000000000000
+[MBOX]: mbox_base[6] | Address: 0x00000000FE00B898 | Value: 0x0000000040000000
+[MBOX]: mbox_base[7] | Address: 0x00000000FE00B89C | Value: 0x0000000000000000
+[MBOX]: mbox_base[8] | Address: 0x00000000FE00B8A0 | Value: 0x000000002FEFD008
+[MBOX]: dev_framebuffer1 = 0x000000003E73F000
+[MBOX]: dev_pitchspace1 = 0x0000000000001400
+[MBOX]: dev_framebuffer2 = 0x000000003E3BA000
+[MBOX]: dev_pitchspace2 = 0x0000000000000000
+[MBOX]: mbox_packet[0] = 0x0000000000000058
+[MBOX]: mbox_packet[1] = 0x0000000080000000
+[MBOX]: mbox_packet[2] = 0x0000000000048003
+[MBOX]: mbox_packet[3] = 0x0000000000000008
+[MBOX]: mbox_packet[4] = 0x0000000080000008
+[MBOX]: mbox_packet[5] = 0x0000000000000500
+[MBOX]: mbox_packet[6] = 0x00000000000002D0
+[MBOX]: mbox_packet[7] = 0x0000000000048004
+[MBOX]: mbox_packet[8] = 0x0000000000000008
+[MBOX]: mbox_packet[9] = 0x0000000080000008
+[MBOX]: mbox_packet[10] = 0x0000000000000500
+[MBOX]: mbox_packet[11] = 0x00000000000002D0
+[MBOX]: mbox_packet[12] = 0x0000000000040001
+[MBOX]: mbox_packet[13] = 0x0000000000000008
+[MBOX]: mbox_packet[14] = 0x0000000080000008
+[MBOX]: mbox_packet[15] = 0x00000000FE3BA000
+[MBOX]: mbox_packet[16] = 0x0000000000000000
+[MBOX]: mbox_packet[17] = 0x0000000000040008
+[MBOX]: mbox_packet[18] = 0x0000000000000004
+[MBOX]: mbox_packet[19] = 0x0000000000000004
+[MBOX]: mbox_packet[20] = 0x0000000000000000
+[MBOX]: mbox_packet[21] = 0x0000000000000000
+[CALL]: NTSTATUS BddDdiQueryChildRelations
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::QueryChildRelations
+[CALL]: NTSTATUS BddDdiQueryChildStatus
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::QueryChildStatus
+[CALL]: NTSTATUS BddDdiQueryDeviceDescriptor
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::QueryDeviceDescriptor
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::GetEdid
+[WARN]: DXGKQAITYPE_DISPLAYID_DESCRIPTOR Not Supported
+[CALL]: NTSTATUS APIENTRY BddDdiRecommendMonitorModes
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::RecommendMonitorModes
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleMonitorMode
+[CALL]: D3DDDI_VIDEO_PRESENT_SOURCE_ID BASIC_DISPLAY_DRIVER::FindSourceForTarget
+[CALL]: NTSTATUS APIENTRY BddDdiIsSupportedVidPn
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::IsSupportedVidPn
+[CALL]: NTSTATUS APIENTRY BddDdiEnumVidPnCofuncModality
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode
+[INFO]: SourceId: 0
+[INFO]: PrimWidth: 1280 | PrimHeight: 720
+[INFO]: VisibleWidth: 1280 | VisibleHeight: 720
+[INFO]: Pitch: 0 (0x0000)
+[INFO]: Stride: 0 (0x0000)
+[WARN]: pfnAddMode1 failed with Status = 0x00000000C01E033C, hVidPnSourceModeSet = 0xFFFFBD853071D4C0, pVidPnSourceModeInfo = 0xFFFFBD8542503F90
+[WARN]: pfnAddMode1 failed with Status = 0x00000000C01E033C, hVidPnSourceModeSet = 0xFFFFBD853071D2B0, pVidPnSourceModeInfo = 0xFFFFBD8542505840
+[WARN]: pfnAddMode1 failed with Status = 0x00000000C01E033C, hVidPnSourceModeSet = 0xFFFFBD853071C700, pVidPnSourceModeInfo = 0xFFFFBD8542505930
+[CALL]: NTSTATUS BddDdiStopDevice
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::StopDevice
+[CALL]: VOID BASIC_DISPLAY_DRIVER::CleanUp
+[CALL]: void mbox_mmio_cleanup
+[CALL]: NTSTATUS BddDdiRemoveDevice
+[CALL]: BASIC_DISPLAY_DRIVER::~BASIC_DISPLAY_DRIVER
+[CALL]: void BDD_HWBLT::SetPresentWorkerThreadInfo
+[CALL]: VOID BddDdiUnload
+**************************************************************************
+Unable to read debugger data block header
+The target has requested that the debugger execute a command: !amli err 0xc 0000000000000001 0000000000000003 0000000000000000 0000000000000000;g
+KDTARGET: Refreshing KD connection
+[CALL]: DriverEntry
+[CALL]: DriverDeviceAdd
+[CALL]: DevicePrepareHardware
+[CALL]: DevicePowerUp
+[MBOX]: physical = 0x000000002FEFF000
+[MBOX]: mail = 0x000000002FEFF008
+[MBOX]: mbox_base[4] | Address: 0x00000000FE00B890 | Value: 0x00000000EA74C008
+[MBOX]: mbox_base[5] | Address: 0x00000000FE00B894 | Value: 0x0000000000000001
+[MBOX]: mbox_base[8] | Address: 0x00000000FE00B8A0 | Value: 0x00000000EA74C008
+[MBOX]: dev_framebuffer1 = 0x000000003E73D000
+[MBOX]: dev_framebuffer2 = 0x000000003E3B8000
+[MBOX]: dev_pitchspace2 = 0x0000000000001400
+[MBOX]: mbox_packet[15] = 0x00000000FE3B8000
+[MBOX]: mbox_packet[16] = 0x0000000000384000
+[MBOX]: mbox_packet[19] = 0x0000000080000004
+[MBOX]: mbox_packet[20] = 0x0000000000001400
+[INFO]: Pitch: 5120 (0x1400)
+[INFO]: Stride: 5120 (0x1400)
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleTargetMode
+[CALL]: NTSTATUS APIENTRY BddDdiCommitVidPn
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::IsVidPnSourceModeFieldsValid
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::IsVidPnPathFieldsValid
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::SetSourceModeAndPath
+[CALL]: NTSTATUS MapFrameBuffer | FrameBuffer: 0x3E3B8000
+[CALL]: VOID BASIC_DISPLAY_DRIVER::BlackOutScreen
+[CALL]: NTSTATUS APIENTRY BddDdiSetVidPnSourceVisibility
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::SetVidPnSourceVisibility
+[CALL]: NTSTATUS APIENTRY BddDdiSetPointerPosition
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::SetPointerPosition
+[CALL]: NTSTATUS APIENTRY BddDdiPresentDisplayOnly
+[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::PresentDisplayOnly
+[CALL]: NTSTATUS BDD_HWBLT::ExecutePresentDisplayOnly
+[CALL]: NTSTATUS StartHwBltPresentWorkerThread
+[CALL]: void HwContextWorkerThread
+[CALL]: void HwExecutePresentDisplayOnly
+[CALL]: VOID BltBits
+[CALL]: VOID CopyBits32_32
+[CALL]: void ReportPresentProgress
+[CALL]: VOID BddDdiDpcRoutine
+[CALL]: VOID BASIC_DISPLAY_DRIVER::DpcRoutine
+[INFO]: Interrupt Routine and DPC Complete
+fffff801`7f607570 d43e0000 brk         #0xF000
+[CALL]: NTSTATUS UnmapFrameBuffer
+[CALL]: DevicePowerDown
+Shutdown occurred at (Mon Apr  5 21:52:54.233 2021 (UTC + 1:00))...unloading all symbol tables.
+Connected to Windows 10 21337 ARM 64-bit (AArch64) target at (Mon Apr  5 21:53:35.325 2021 (UTC + 1:00)), ptr64 TRUE
+Windows 10 Kernel Version 21337 MP (1 procs) Free ARM 64-bit (AArch64)
+Kernel base = 0xfffff802`af000000 PsLoadedModuleList = 0xfffff802`afc2a860
+System Uptime: 0 days 0:00:00.000

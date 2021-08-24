@@ -213,18 +213,11 @@ NTSTATUS BDD_HWBLT::ExecutePresentDisplayOnly
     SIZE_T sizeRects = NumDirtyRects*sizeof(RECT);
     SIZE_T size = sizeof(DoPresentMemory) + sizeMoves + sizeRects;
 
-    DoPresentMemory* ctx = reinterpret_cast<DoPresentMemory*>
-                                (new (PagedPool) BYTE[size]);
-
-    if (!ctx)
-    {
-        return STATUS_NO_MEMORY;
-    }
-
+    DoPresentMemory* ctx = reinterpret_cast<DoPresentMemory*>(new (PagedPool) BYTE[size]);
+    if (!ctx) { return STATUS_NO_MEMORY; }
     RtlZeroMemory(ctx,size);
 
     const CURRENT_BDD_MODE* pModeCur = m_DevExt->GetCurrentMode(m_SourceId);
-
     ctx->DstAddr          = DstAddr;
     ctx->DstBitPerPixel   = DstBitPerPixel;
     ctx->DstStride        = pModeCur->DispInfo.Pitch;
@@ -245,7 +238,6 @@ NTSTATUS BDD_HWBLT::ExecutePresentDisplayOnly
     // Alternate between synch and asynch execution, for demonstrating 
     // that a real hardware implementation can do either
     m_SynchExecution = !m_SynchExecution;
-
     ctx->SynchExecution   = m_SynchExecution;
 
     {
@@ -307,7 +299,6 @@ NTSTATUS BDD_HWBLT::ExecutePresentDisplayOnly
         memcpy(rects,DirtyRect,sizeRects);
         ctx->DirtyRect = reinterpret_cast<RECT*>(rects);
     }
-
 
     if (m_SynchExecution)
     {
@@ -374,7 +365,7 @@ void ReportPresentProgress
         (PVOID)&SyncNotifyInterrupt, 0, &bRet);
     if (NT_ERROR(status) || (!bRet))
     {
-        debug("[ASRT]: ((Status = 0x%016llX) || (bRet = %s)) | void ReportPresentProgress", status, (bRet) ? "TRUE" : "FALSE");
+        debug("[ASRT]: ((Status = 0x%08lX) || (bRet = %s)) | void ReportPresentProgress", status, (bRet) ? "TRUE" : "FALSE");
     }
     */
     //const DXGKRNL_INTERFACE* pInterface = pDevExt->GetDxgkInterface();
@@ -470,11 +461,11 @@ void HwExecutePresentDisplayOnly(HANDLE Context)
 
     KeLeaveCriticalRegion();
 
-    if(ctx->SynchExecution)
+    if (ctx->SynchExecution)
     {
         // This code simulates Blt executed synchronously
         // nothing should be done here, just exit
-        ;
+        // ;
     }
     else
     {

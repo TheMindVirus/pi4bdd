@@ -1,0 +1,143 @@
+[How to max all 4 Pi4 CPU's at 100%] - by The
+
+: Issue - CPU Frequency Scaling to Save Power can have the negative side effect of
+          destroying communication between the OS and the peripherals it controls.
+
+Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00
+
+* Add "Attributes" REG_DWORD 0x00000002 (2) to every subkey and reboot
+
+Control Panel -> System and Security -> Power Options -> High performance
+-> Change plan settings -> Change advanced power settings -> High performance [Active]
+-> Processor power management
+
+* Processor performance increase threshold
+- Setting: 30%
+* Processor performance increase threshold for Processor Power Efficiency Class 1
+- Setting: 60%
+* Processor performance core parking min cores
+- Setting: 100%
+* Processor performance core parking min. cores for Processor Power Efficiency Class 1
+- Setting: 0%
+* Processor performance decrease threshold
+- Setting: 10%
+* Processor performance decrease threshold for Processor Power Efficiency Class 1
+- Setting: 20%
+* Initial performance for Processor Power Efficiency Class 1 when unparked
+- Setting: 100%
+* Processor performance core parking concurrency threshold
+- Setting: 97%
+* Processor performance core parking increase time
+- Setting: 7 Time check intervals
+* Processor energy performance preference policy
+- Setting: 0%
+* Processor energy performance preference policy for Processor Power Efficiency Class 1
+- Setting: 0%
+* Allow Throttle States
+- Setting: Off
+* Proessor performance increase time for Processor Power Efficiency Class 1
+- Setting: 1 Time check intervals
+* Processor performance decrease policy
+- Setting: Single
+* Processor performance decrease policy for Processor Power Efficiency Class 1
+- Setting: Ideal
+* Processor performance core parking parked performance state
+- Setting: No Preference
+* Processor performance core parking parked performance state for Processor Power Efficiency Class 1
+- Setting: No Preference
+* Processor performance boost policy
+- Setting: 100%
+* Processor performance increase policy
+- Setting: Rocket
+* Processor performance increase policy for Processor Power Efficiency Class 1
+- Setting: IdealAggressive
+* Processor idle demote threshold
+- Setting: 40%
+* Processor performance core parking distribution threshold
+- Setting: 90%
+* Processor performance time check interval
+- Setting: 15 Milliseconds
+* Processor duty cycling
+- Setting: Disabled
+* Processor idle disable
+- Setting: Disable idle
+* Latency sensitivity hint min. unparked cores/packages
+- Setting: 50%
+* Latency sensitivity hint min. unparked cores/packages for Processor Power Efficiency Class 1
+- Setting: 0%
+* Latency sensitivity hint processor performance
+- Setting: 99%
+* Latency sensitivity hint processor performance for Processor Power Efficiency Class 1
+- Setting: 50%
+* Processor idle threshold scaling
+- Setting: Disable scaling
+* Processor performance core parking decrease policy
+- Setting: Ideal number of cores
+* Maximum processor frequency
+- Setting: 0 MHz
+* Maximum processor frequency for Proessor Power Efficiency Class 1
+- Setting: 0 MHz
+* Processor idle promote threshold
+- Setting: 60%
+* Processor performance history count
+- Setting: 1 Time check intervals
+* Processor performance history count for Processor Power Efficiency Class 1
+- Setting: 1 Time check intervals
+* Processor performance decrease time for Processor Power Efficiency Class 1
+- Setting: 3 Time check intervals
+* Heterogeneous policy in effect
+- Setting: Use heterogeneous policy 4
+* Minimum processor state for Processor Power Efficiency Class 1
+- Setting: 100%
+* Processor performance autonomous mode
+- Setting: Disabled
+* Heterogeneous thread scheduling policy
+- Setting: Automatic
+* Processor performance core parking over-utilisation threshold
+- Setting: 60%
+* System cooling policy
+- Setting: Active
+* Processor performance core parking soft park latency
+- Setting: 0 Microseconds
+* Processor performance increase time
+- Setting: 1 Time check intervals
+* Processor performance increase time for Processor Power Efficiency Class 1
+- Setting: 1 Time check intervals
+* Processor idle state maximum
+- Setting: 0 State Type
+* Processor performance level increase threshold for Processor Power Efficiency Class 1 processor count increase
+- Setting: Processor performance level threshold change for Processor Power Efficiency Class 1 processor count change
+* Heterogeneous short running thread scheduling policy
+- Setting: Automatic
+* Maximum processor state for Processor Power Efficiency Class 1
+- Setting: 100%
+* Processor performance boost mode
+- Setting: Aggressive
+* Processor idle time check
+- Setting: 50000 Microseconds
+* Processor performance core parking increase policy
+- Setting: Ideal number of cores
+* Processor autonomous activity window
+- Setting: 30000 Microseconds
+* Processor performance decrease time
+- Setting: 1 Time check intervals
+* Processor performance decrease time for Processor Power Efficiency Class 1
+- Setting: 2 Time check intervals
+* Short vs. long running thread threshold
+- Setting: 0 Microseconds
+* Processor performance core parking decrease time
+- Setting: 20 Time check intervals
+* Processor performance core parking utility distribution
+- Setting: Disabled
+* Processor performance core parking max cores
+- Setting: 100%
+* Processor performance core parking max. cores for Processor Power Efficiency Class 1
+- Setting: 100%
+* Processor performance core parking concurrency headroom threshold
+- Setting: 20%
+* Processor performance level decrease threshold for Processor Power Efficiency Class 1 processor count decrease
+- Setting: Processor performance level threshold change for Processor Power Efficiency Class 1 processor count change
+* A floor performance for Processor Power Efficiency Class 0 when there are Processor Power Efficiency Class 1 processors unparked
+- Setting: 100%
+
+Restart and Open Task Manager's Performance Tab (make sure you've got active cooling, but I've been running this for days with none)

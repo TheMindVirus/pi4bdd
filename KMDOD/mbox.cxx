@@ -1,19 +1,8 @@
 #include "bdd.hxx"
 
-//====================[Variables from PiX-iES]======================
-
-PULONG    mbox_base = NULL;
-PULONG    mbox_packet = NULL;
-
-ADDRESS   dev_framebuffer1 = NULL;
-VALUE     dev_pitchspace1 = 0;
-
-ADDRESS   dev_framebuffer2 = NULL;
-VALUE     dev_pitchspace2 = 0;
-
 //=====================[MMIO port from PiX-iES]=====================
 
-void mbox_mmio_setup()
+void BASIC_DISPLAY_DRIVER::mbox_mmio_setup()
 {
     debug("[CALL]: void mbox_mmio_setup");
     PHYSICAL_ADDRESS base = {0};
@@ -28,7 +17,7 @@ void mbox_mmio_setup()
     if (!mbox_packet) { debug("[WARN]: Failed to Memory-Map Mailbox Packet"); }
 }
 
-void mbox_mmio_cleanup()
+void BASIC_DISPLAY_DRIVER::mbox_mmio_cleanup()
 {
     debug("[CALL]: void mbox_mmio_cleanup");
     if (mbox_base)
@@ -45,15 +34,15 @@ void mbox_mmio_cleanup()
 
 //==================[Implementation from PiX-iES]===================
 
-VALUE mbox_setup(BYTE channel)
+VALUE BASIC_DISPLAY_DRIVER::mbox_setup(BYTE channel)
 {
     debug("[CALL]: VALUE mbox_setup");
     if ((!mbox_base) || (!mbox_packet)) { debug("[MBOX]: Error 1"); return MBOX_FAILURE; }
 
     VALUE checked = 0;
     VALUE mail = ((((ADDRESS)MmGetPhysicalAddress(mbox_packet).QuadPart) & ~0xF) | (channel & 0xF)); //0xF reserved for 4-bit channel //<--Needs to be a physical address so the VC knows where it is
-    debug("[MBOX]: physical = 0x%016llX", MmGetPhysicalAddress(mbox_packet).QuadPart);
-    debug("[MBOX]: mail = 0x%016llX", mail);
+    debug("[MBOX]: physical = 0x%08lX", MmGetPhysicalAddress(mbox_packet).QuadPart);
+    debug("[MBOX]: mail = 0x%08lX", mail);
 
     KeEnterCriticalRegion();
 
@@ -70,7 +59,7 @@ VALUE mbox_setup(BYTE channel)
 
     for (size_t i = 0; i < (MBOX_SIZE / 4); ++i)
     {
-        debug("[MBOX]: mbox_base[%d] | Address: 0x%016llX | Value: 0x%016llX",
+        debug("[MBOX]: mbox_base[%d] | Address: 0x%08lX | Value: 0x%08lX",
             i, MmGetPhysicalAddress(mbox_base + i), mmio_read(mbox_base, i));
     }
 
@@ -114,7 +103,7 @@ failure:
     return MBOX_FAILURE;
 }
 
-void mbox_set_display(VALUE display)
+void BASIC_DISPLAY_DRIVER::mbox_set_display(VALUE display)
 {
     debug("[CALL]: void mbox_set_display");
     VALUE i = 1;
@@ -132,7 +121,7 @@ void mbox_set_display(VALUE display)
     if (MBOX_SUCCESS != mbox_setup(8)) { debug("[WARN]: Mailbox Transaction Error"); }
 }
 
-void mbox_get_display_info()
+void BASIC_DISPLAY_DRIVER::mbox_get_display_info()
 {
     debug("[CALL]: void mbox_get_display_info");
     VALUE i = 1;
@@ -174,8 +163,8 @@ b=i;mbox_packet[i++] = 0;            //Value
     {
         dev_framebuffer1 = mbox_packet[a] & 0x3FFFFFFF; //Translate from VC to ARM address
         dev_pitchspace1 = mbox_packet[b];
-        debug("[MBOX]: dev_framebuffer1 = 0x%016llX", dev_framebuffer1);
-        debug("[MBOX]: dev_pitchspace1 = 0x%016llX", dev_pitchspace1);
+        debug("[MBOX]: dev_framebuffer1 = 0x%08lX", dev_framebuffer1);
+        debug("[MBOX]: dev_pitchspace1 = 0x%08lX", dev_pitchspace1);
     }
     else { debug("[WARN]: Mailbox Transaction Error"); }
 
@@ -213,12 +202,12 @@ d=i;mbox_packet[i++] = 0;            //Value
     {
         dev_framebuffer2 = mbox_packet[c] & 0x3FFFFFFF; //Translate from VC to ARM address
         dev_pitchspace2 = mbox_packet[d];
-        debug("[MBOX]: dev_framebuffer2 = 0x%016llX", dev_framebuffer2);
-        debug("[MBOX]: dev_pitchspace2 = 0x%016llX", dev_pitchspace2);
+        debug("[MBOX]: dev_framebuffer2 = 0x%08lX", dev_framebuffer2);
+        debug("[MBOX]: dev_pitchspace2 = 0x%08lX", dev_pitchspace2);
     }
     else { debug("[WARN]: Mailbox Transaction Error"); }
 
-    for (size_t j = 0; j < i; ++j) { debug("[MBOX]: mbox_packet[%d] = 0x%016llX", j, mbox_packet[j]); }
+    for (size_t j = 0; j < i; ++j) { debug("[MBOX]: mbox_packet[%d] = 0x%08lX", j, mbox_packet[j]); }
 }
 
 //==================================================================

@@ -37,18 +37,6 @@
 #define MBOX_TIMEOUT   1000000 //microseconds
 #define MBOX_RETRIES   10 //times
 
-//====================[Variables from PiX-iES]======================
-
-STATIC PULONG   mbox_base;
-//STATIC MAILBOX   mbox_packet[MAX_SIZE] PACK(16); //0xF reserved for 4-bit channel //16-packed mailbox
-STATIC PULONG   mbox_packet;
-
-STATIC ADDRESS   dev_framebuffer1;
-STATIC VALUE     dev_pitchspace1;
-
-STATIC ADDRESS   dev_framebuffer2;
-STATIC VALUE     dev_pitchspace2;
-
 //=====================[Macros from PiX-iES]========================
 
 //#define mmio_read(base, offset)           (REFER(POINTER)(base + offset))
@@ -60,13 +48,6 @@ STATIC VALUE     dev_pitchspace2;
 #define mbox_peek()                       (mmio_read(mbox_base, MBOX_STATUS))
 #define mbox_read()                       (mmio_read(mbox_base, MBOX_READ))
 #define mbox_write(addrech)               (mmio_write(mbox_base, MBOX_WRITE, addrech))
-
-void mbox_mmio_setup();
-void mbox_mmio_cleanup();
-
-VALUE mbox_setup(BYTE channel);
-void mbox_set_display(VALUE display);
-void mbox_get_display_info();
 
 //==================================================================
 

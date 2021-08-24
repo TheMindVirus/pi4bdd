@@ -130,7 +130,7 @@ VOID GetPitches(_In_ CONST BLT_INFO* pBltInfo, _Out_ LONG* pPixelPitch, _Out_ LO
         }
         default:
         {
-            debug("[WARN]: Invalid rotation (0x%016llX) specified", pBltInfo->Rotation);
+            debug("[WARN]: Invalid rotation (0x%08lX) specified", pBltInfo->Rotation);
             *pPixelPitch = 0;
             *pRowPitch = 0;
             return;
@@ -177,7 +177,7 @@ BYTE* GetRowStart(_In_ CONST BLT_INFO* pBltInfo, CONST RECT* pRect)
         }
         default:
         {
-            debug("[WARN]: Invalid rotation (0x%016llX) specified", pBltInfo->Rotation);
+            debug("[WARN]: Invalid rotation (0x%08lX) specified", pBltInfo->Rotation);
             break;
         }
     }
@@ -329,6 +329,6 @@ VOID BltBits(
     #pragma prefast(suppress: __WARNING_EXCEPTIONEXECUTEHANDLER, "try/except is only able to protect against user-mode errors and these are the only errors we try to catch here");
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        debug("[WARN]: Either dst (0x%016llX) or src (0x%016llX) bits encountered exception during access.", pDst->pBits, pSrc->pBits);
+        debug("[WARN]: Either dst (0x%08lX) or src (0x%08lX) bits encountered exception during access.", pDst->pBits, pSrc->pBits);
     }
 }

@@ -40,9 +40,6 @@
     <ClInclude Include="bdd.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="debug.hxx">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="mbox.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>

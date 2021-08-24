@@ -25,7 +25,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::IsSupportedVidPn(_Inout_ DXGKARG_ISSUPPORTEDVIDPN
     NTSTATUS Status = m_DxgkInterface.DxgkCbQueryVidPnInterface(pIsSupportedVidPn->hDesiredVidPn, DXGK_VIDPN_INTERFACE_VERSION_V1, &pVidPnInterface);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: DxgkCbQueryVidPnInterface failed with Status = 0x%016llX, hDesiredVidPn = 0x%016llX", Status, pIsSupportedVidPn->hDesiredVidPn);
+        debug("[WARN]: DxgkCbQueryVidPnInterface failed with Status = 0x%08lX, hDesiredVidPn = %p", Status, pIsSupportedVidPn->hDesiredVidPn);
         return Status;
     }
 
@@ -34,7 +34,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::IsSupportedVidPn(_Inout_ DXGKARG_ISSUPPORTEDVIDPN
     Status = pVidPnInterface->pfnGetTopology(pIsSupportedVidPn->hDesiredVidPn, &hVidPnTopology, &pVidPnTopologyInterface);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: pfnGetTopology failed with Status = 0x%016llX, hDesiredVidPn = 0x%016llX", Status, pIsSupportedVidPn->hDesiredVidPn);
+        debug("[WARN]: pfnGetTopology failed with Status = 0x%08lX, hDesiredVidPn = %p", Status, pIsSupportedVidPn->hDesiredVidPn);
         return Status;
     }
 
@@ -49,8 +49,8 @@ NTSTATUS BASIC_DISPLAY_DRIVER::IsSupportedVidPn(_Inout_ DXGKARG_ISSUPPORTEDVIDPN
         }
         else if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnGetNumPathsFromSource failed with Status = 0x%016llX. hVidPnTopology = 0x%016llX, SourceId = 0x%016llX",
-                           Status, hVidPnTopology, SourceId);
+            debug("[WARN]: pfnGetNumPathsFromSource failed with Status = 0x%08lX. hVidPnTopology = %p, SourceId = 0x%08lX",
+                  Status, hVidPnTopology, SourceId);
             return Status;
         }
         else if (NumPathsFromSource > MAX_CHILDREN)
@@ -110,7 +110,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
     NTSTATUS Status = m_DxgkInterface.DxgkCbQueryVidPnInterface(pEnumCofuncModality->hConstrainingVidPn, DXGK_VIDPN_INTERFACE_VERSION_V1, &pVidPnInterface);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: DxgkCbQueryVidPnInterface failed with Status = 0x%016llX, hFunctionalVidPn = 0x%016llX", Status, pEnumCofuncModality->hConstrainingVidPn);
+        debug("[WARN]: DxgkCbQueryVidPnInterface failed with Status = 0x%08lX, hFunctionalVidPn = %p", Status, pEnumCofuncModality->hConstrainingVidPn);
         return Status;
     }
 
@@ -118,7 +118,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
     Status = pVidPnInterface->pfnGetTopology(pEnumCofuncModality->hConstrainingVidPn, &hVidPnTopology, &pVidPnTopologyInterface);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: pfnGetTopology failed with Status = 0x%016llX, hFunctionalVidPn = 0x%016llX", Status, pEnumCofuncModality->hConstrainingVidPn);
+        debug("[WARN]: pfnGetTopology failed with Status = 0x%08lX, hFunctionalVidPn = %p", Status, pEnumCofuncModality->hConstrainingVidPn);
         return Status;
     }
 
@@ -126,7 +126,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
     Status = pVidPnTopologyInterface->pfnAcquireFirstPathInfo(hVidPnTopology, &pVidPnPresentPath);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: pfnAcquireFirstPathInfo failed with Status = 0x%016llX, hVidPnTopology = 0x%016llX", Status, hVidPnTopology);
+        debug("[WARN]: pfnAcquireFirstPathInfo failed with Status = 0x%08lX, hVidPnTopology = %p", Status, hVidPnTopology);
         return Status;
     }
 
@@ -140,7 +140,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
             &pVidPnSourceModeSetInterface);
         if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnAcquireSourceModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, SourceId = 0x%016llX",
+            debug("[WARN]: pfnAcquireSourceModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, SourceId = 0x%08lX",
                 Status, pEnumCofuncModality->hConstrainingVidPn, pVidPnPresentPath->VidPnSourceId);
             break;
         }
@@ -149,7 +149,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
         Status = pVidPnSourceModeSetInterface->pfnAcquirePinnedModeInfo(hVidPnSourceModeSet, &pVidPnPinnedSourceModeInfo);
         if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnAcquirePinnedModeInfo failed with Status = 0x%016llX, hVidPnSourceModeSet = 0x%016llX", Status, hVidPnSourceModeSet);
+            debug("[WARN]: pfnAcquirePinnedModeInfo failed with Status = 0x%08lX, hVidPnSourceModeSet = %p", Status, hVidPnSourceModeSet);
             break;
         }
 
@@ -164,7 +164,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                 Status = pVidPnInterface->pfnReleaseSourceModeSet(pEnumCofuncModality->hConstrainingVidPn, hVidPnSourceModeSet);
                 if (!NT_SUCCESS(Status))
                 {
-                    debug("[WARN]: pfnReleaseSourceModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, hVidPnSourceModeSet = 0x%016llX",
+                    debug("[WARN]: pfnReleaseSourceModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, hVidPnSourceModeSet = %p",
                         Status, pEnumCofuncModality->hConstrainingVidPn, hVidPnSourceModeSet);
                     break;
                 }
@@ -177,7 +177,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                     &pVidPnSourceModeSetInterface);
                 if (!NT_SUCCESS(Status))
                 {
-                    debug("[WARN]: pfnCreateNewSourceModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, SourceId = 0x%016llX",
+                    debug("[WARN]: pfnCreateNewSourceModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, SourceId = 0x%08lX",
                         Status, pEnumCofuncModality->hConstrainingVidPn, pVidPnPresentPath->VidPnSourceId);
                     break;
                 }
@@ -196,7 +196,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                 Status = pVidPnInterface->pfnAssignSourceModeSet(pEnumCofuncModality->hConstrainingVidPn, pVidPnPresentPath->VidPnSourceId, hVidPnSourceModeSet);
                 if (!NT_SUCCESS(Status))
                 {
-                    debug("[WARN]: pfnAssignSourceModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, SourceId = 0x%016llX, hVidPnSourceModeSet = 0x%016llX",
+                    debug("[WARN]: pfnAssignSourceModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, SourceId = 0x%08lX, hVidPnSourceModeSet = %p",
                         Status, pEnumCofuncModality->hConstrainingVidPn, pVidPnPresentPath->VidPnSourceId, hVidPnSourceModeSet);
                     break;
                 }
@@ -215,7 +215,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                 &pVidPnTargetModeSetInterface);
             if (!NT_SUCCESS(Status))
             {
-                debug("[WARN]: pfnAcquireTargetModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, TargetId = 0x%016llX",
+                debug("[WARN]: pfnAcquireTargetModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, TargetId = 0x%08lX",
                     Status, pEnumCofuncModality->hConstrainingVidPn, pVidPnPresentPath->VidPnTargetId);
                 break;
             }
@@ -223,7 +223,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
             Status = pVidPnTargetModeSetInterface->pfnAcquirePinnedModeInfo(hVidPnTargetModeSet, &pVidPnPinnedTargetModeInfo);
             if (!NT_SUCCESS(Status))
             {
-                debug("[WARN]: pfnAcquirePinnedModeInfo failed with Status = 0x%016llX, hVidPnTargetModeSet = 0x%016llX", Status, hVidPnTargetModeSet);
+                debug("[WARN]: pfnAcquirePinnedModeInfo failed with Status = 0x%08lX, hVidPnTargetModeSet = %p", Status, hVidPnTargetModeSet);
                 break;
             }
 
@@ -234,7 +234,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                 Status = pVidPnInterface->pfnReleaseTargetModeSet(pEnumCofuncModality->hConstrainingVidPn, hVidPnTargetModeSet);
                 if (!NT_SUCCESS(Status))
                 {
-                    debug("[WARN]: pfnReleaseTargetModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, hVidPnTargetModeSet = 0x%016llX",
+                    debug("[WARN]: pfnReleaseTargetModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, hVidPnTargetModeSet = %p",
                         Status, pEnumCofuncModality->hConstrainingVidPn, hVidPnTargetModeSet);
                     break;
                 }
@@ -247,7 +247,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                     &pVidPnTargetModeSetInterface);
                 if (!NT_SUCCESS(Status))
                 {
-                    debug("[WARN]: pfnCreateNewTargetModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, TargetId = 0x%016llX",
+                    debug("[WARN]: pfnCreateNewTargetModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, TargetId = 0x%08lX",
                         Status, pEnumCofuncModality->hConstrainingVidPn, pVidPnPresentPath->VidPnTargetId);
                     break;
                 }
@@ -263,7 +263,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                 Status = pVidPnInterface->pfnAssignTargetModeSet(pEnumCofuncModality->hConstrainingVidPn, pVidPnPresentPath->VidPnTargetId, hVidPnTargetModeSet);
                 if (!NT_SUCCESS(Status))
                 {
-                    debug("[WARN]: pfnAssignTargetModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, TargetId = 0x%016llX, hVidPnTargetModeSet = 0x%016llX",
+                    debug("[WARN]: pfnAssignTargetModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, TargetId = 0x%08lX, hVidPnTargetModeSet = %p",
                         Status, pEnumCofuncModality->hConstrainingVidPn, pVidPnPresentPath->VidPnTargetId, hVidPnTargetModeSet);
                     break;
                 }
@@ -275,7 +275,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                 Status = pVidPnTargetModeSetInterface->pfnReleaseModeInfo(hVidPnTargetModeSet, pVidPnPinnedTargetModeInfo);
                 if (!NT_SUCCESS(Status))
                 {
-                    debug("[WARN]: pfnReleaseModeInfo failed with Status = 0x%016llX, hVidPnTargetModeSet = 0x%016llX, pVidPnPinnedTargetModeInfo = 0x%016llX",
+                    debug("[WARN]: pfnReleaseModeInfo failed with Status = 0x%08lX, hVidPnTargetModeSet = %p, pVidPnPinnedTargetModeInfo = %p",
                         Status, hVidPnTargetModeSet, pVidPnPinnedTargetModeInfo);
                     break;
                 }
@@ -285,7 +285,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
                 Status = pVidPnInterface->pfnReleaseTargetModeSet(pEnumCofuncModality->hConstrainingVidPn, hVidPnTargetModeSet);
                 if (!NT_SUCCESS(Status))
                 {
-                    debug("[WARN]: pfnReleaseTargetModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, hVidPnTargetModeSet = 0x%016llX",
+                    debug("[WARN]: pfnReleaseTargetModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, hVidPnTargetModeSet = %p",
                         Status, pEnumCofuncModality->hConstrainingVidPn, hVidPnTargetModeSet);
                     break;
                 }
@@ -299,7 +299,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
             Status = pVidPnSourceModeSetInterface->pfnReleaseModeInfo(hVidPnSourceModeSet, pVidPnPinnedSourceModeInfo);
             if (!NT_SUCCESS(Status))
             {
-                debug("[WARN]: pfnReleaseModeInfo failed with Status = 0x%016llX, hVidPnSourceModeSet = 0x%016llX, pVidPnPinnedSourceModeInfo = 0x%016llX",
+                debug("[WARN]: pfnReleaseModeInfo failed with Status = 0x%08lX, hVidPnSourceModeSet = %p, pVidPnPinnedSourceModeInfo = %p",
                     Status, hVidPnSourceModeSet, pVidPnPinnedSourceModeInfo);
                 break;
             }
@@ -312,7 +312,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
             Status = pVidPnInterface->pfnReleaseSourceModeSet(pEnumCofuncModality->hConstrainingVidPn, hVidPnSourceModeSet);
             if (!NT_SUCCESS(Status))
             {
-                debug("[WARN]: pfnReleaseSourceModeSet failed with Status = 0x%016llX, hConstrainingVidPn = 0x%016llX, hVidPnSourceModeSet = 0x%016llX",
+                debug("[WARN]: pfnReleaseSourceModeSet failed with Status = 0x%08lX, hConstrainingVidPn = %p, hVidPnSourceModeSet = %p",
                     Status, pEnumCofuncModality->hConstrainingVidPn, hVidPnSourceModeSet);
                 break;
             }
@@ -366,7 +366,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
             Status = pVidPnTopologyInterface->pfnUpdatePathSupportInfo(hVidPnTopology, &LocalVidPnPresentPath);
             if (!NT_SUCCESS(Status))
             {
-                debug("[WARN]: pfnUpdatePathSupportInfo failed with Status = 0x%016llX, hVidPnTopology = 0x%016llX", Status, hVidPnTopology);
+                debug("[WARN]: pfnUpdatePathSupportInfo failed with Status = 0x%08lX, hVidPnTopology = %p", Status, hVidPnTopology);
                 break;
             }
         }
@@ -377,7 +377,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
         Status = pVidPnTopologyInterface->pfnAcquireNextPathInfo(hVidPnTopology, pVidPnPresentPathTemp, &pVidPnPresentPath);
         if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnAcquireNextPathInfo failed with Status = 0x%016llX, hVidPnTopology = 0x%016llX, pVidPnPresentPathTemp = 0x%016llX", Status, hVidPnTopology, pVidPnPresentPathTemp);
+            debug("[WARN]: pfnAcquireNextPathInfo failed with Status = 0x%08lX, hVidPnTopology = %p, pVidPnPresentPathTemp = %p", Status, hVidPnTopology, pVidPnPresentPathTemp);
             break;
         }
 
@@ -385,7 +385,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::EnumVidPnCofuncModality(_In_ CONST DXGKARG_ENUMVI
         NTSTATUS TempStatus = pVidPnTopologyInterface->pfnReleasePathInfo(hVidPnTopology, pVidPnPresentPathTemp);
         if (!NT_SUCCESS(TempStatus))
         {
-            debug("[WARN]: pfnReleasePathInfo failed with Status = 0x%016llX, hVidPnTopology = 0x%016llX, pVidPnPresentPathTemp = 0x%016llX", TempStatus, hVidPnTopology, pVidPnPresentPathTemp);
+            debug("[WARN]: pfnReleasePathInfo failed with Status = 0x%08lX, hVidPnTopology = %p, pVidPnPresentPathTemp = %p", TempStatus, hVidPnTopology, pVidPnPresentPathTemp);
             Status = TempStatus;
             break;
         }
@@ -502,7 +502,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
     Status = m_DxgkInterface.DxgkCbQueryVidPnInterface(pCommitVidPn->hFunctionalVidPn, DXGK_VIDPN_INTERFACE_VERSION_V1, &pVidPnInterface);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: DxgkCbQueryVidPnInterface failed with Status = 0x%016llX, hFunctionalVidPn = 0x%016llX", Status, pCommitVidPn->hFunctionalVidPn);
+        debug("[WARN]: DxgkCbQueryVidPnInterface failed with Status = 0x%08lX, hFunctionalVidPn = %p", Status, pCommitVidPn->hFunctionalVidPn);
         goto CommitVidPnExit;
     }
 
@@ -510,7 +510,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
     Status = pVidPnInterface->pfnGetTopology(pCommitVidPn->hFunctionalVidPn, &hVidPnTopology, &pVidPnTopologyInterface);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: pfnGetTopology failed with Status = 0x%016llX, hFunctionalVidPn = 0x%016llX", Status, pCommitVidPn->hFunctionalVidPn);
+        debug("[WARN]: pfnGetTopology failed with Status = 0x%08lX, hFunctionalVidPn = %p", Status, pCommitVidPn->hFunctionalVidPn);
         goto CommitVidPnExit;
     }
 
@@ -518,7 +518,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
     Status = pVidPnTopologyInterface->pfnGetNumPaths(hVidPnTopology, &NumPaths);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: pfnGetNumPaths failed with Status = 0x%016llX, hVidPnTopology = 0x%016llX", Status, hVidPnTopology);
+        debug("[WARN]: pfnGetNumPaths failed with Status = 0x%08lX, hVidPnTopology = %p", Status, hVidPnTopology);
         goto CommitVidPnExit;
     }
 
@@ -531,7 +531,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
                                                           &pVidPnSourceModeSetInterface);
         if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnAcquireSourceModeSet failed with Status = 0x%016llX, hFunctionalVidPn = 0x%016llX, SourceId = 0x%016llX",
+            debug("[WARN]: pfnAcquireSourceModeSet failed with Status = 0x%08lX, hFunctionalVidPn = %p, SourceId = 0x%08lX",
                 Status, pCommitVidPn->hFunctionalVidPn, pCommitVidPn->AffectedVidPnSourceId);
             goto CommitVidPnExit;
         }
@@ -540,7 +540,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
         Status = pVidPnSourceModeSetInterface->pfnAcquirePinnedModeInfo(hVidPnSourceModeSet, &pPinnedVidPnSourceModeInfo);
         if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnAcquirePinnedModeInfo failed with Status = 0x%016llX, hFunctionalVidPn = 0x%016llX", Status, pCommitVidPn->hFunctionalVidPn);
+            debug("[WARN]: pfnAcquirePinnedModeInfo failed with Status = 0x%08lX, hFunctionalVidPn = %p", Status, pCommitVidPn->hFunctionalVidPn);
             goto CommitVidPnExit;
         }
     }
@@ -582,7 +582,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
     Status = pVidPnTopologyInterface->pfnGetNumPathsFromSource(hVidPnTopology, pCommitVidPn->AffectedVidPnSourceId, &NumPathsFromSource);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: pfnGetNumPathsFromSource failed with Status = 0x%016llX, hVidPnTopology = 0x%016llX", Status, hVidPnTopology);
+        debug("[WARN]: pfnGetNumPathsFromSource failed with Status = 0x%08lX, hVidPnTopology = %p", Status, hVidPnTopology);
         goto CommitVidPnExit;
     }
 
@@ -594,8 +594,8 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
         Status = pVidPnTopologyInterface->pfnEnumPathTargetsFromSource(hVidPnTopology, pCommitVidPn->AffectedVidPnSourceId, PathIndex, &TargetId);
         if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnEnumPathTargetsFromSource failed with Status = 0x%016llX, hVidPnTopology = 0x%016llX, SourceId = 0x%016llX, PathIndex = 0x%016llX",
-                            Status, hVidPnTopology, pCommitVidPn->AffectedVidPnSourceId, PathIndex);
+            debug("[WARN]: pfnEnumPathTargetsFromSource failed with Status = 0x%08lX, hVidPnTopology = %p, SourceId = 0x%08lX, PathIndex = 0x%016llX",
+                  Status, hVidPnTopology, pCommitVidPn->AffectedVidPnSourceId, PathIndex);
             goto CommitVidPnExit;
         }
 
@@ -603,8 +603,8 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
         Status = pVidPnTopologyInterface->pfnAcquirePathInfo(hVidPnTopology, pCommitVidPn->AffectedVidPnSourceId, TargetId, &pVidPnPresentPath);
         if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnAcquirePathInfo failed with Status = 0x%016llX, hVidPnTopology = 0x%016llX, SourceId = 0x%016llX, TargetId = 0x%016llX",
-                            Status, hVidPnTopology, pCommitVidPn->AffectedVidPnSourceId, TargetId);
+            debug("[WARN]: pfnAcquirePathInfo failed with Status = 0x%08lX, hVidPnTopology = %p, SourceId = 0x%08lX, TargetId = 0x%08lX",
+                  Status, hVidPnTopology, pCommitVidPn->AffectedVidPnSourceId, TargetId);
             goto CommitVidPnExit;
         }
 
@@ -623,7 +623,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::CommitVidPn(_In_ CONST DXGKARG_COMMITVIDPN* CONST
         Status = pVidPnTopologyInterface->pfnReleasePathInfo(hVidPnTopology, pVidPnPresentPath);
         if (!NT_SUCCESS(Status))
         {
-            debug("[WARN]: pfnReleasePathInfo failed with Status = 0x%016llX, hVidPnTopoogy = 0x%016llX, pVidPnPresentPath = 0x%016llX",
+            debug("[WARN]: pfnReleasePathInfo failed with Status = 0x%08lX, hVidPnTopoogy = %p, pVidPnPresentPath = %p",
                             Status, hVidPnTopology, pVidPnPresentPath);
             goto CommitVidPnExit;
         }
@@ -716,17 +716,17 @@ NTSTATUS BASIC_DISPLAY_DRIVER::IsVidPnPathFieldsValid(CONST D3DKMDT_VIDPN_PRESEN
 
     if (pPath->VidPnSourceId >= MAX_VIEWS)
     {
-        debug("[WARN]: VidPnSourceId is 0x%016llX is too high (MAX_VIEWS is 0x%016llX)", pPath->VidPnSourceId, MAX_VIEWS);
+        debug("[WARN]: VidPnSourceId is 0x%08lX is too high (MAX_VIEWS is 0x%08lX)", pPath->VidPnSourceId, MAX_VIEWS);
         return STATUS_GRAPHICS_INVALID_VIDEO_PRESENT_SOURCE;
     }
     else if (pPath->VidPnTargetId >= MAX_CHILDREN)
     {
-        debug("[WARN]: VidPnTargetId is 0x%016llX is too high (MAX_CHILDREN is 0x%016llX)", pPath->VidPnTargetId, MAX_CHILDREN);
+        debug("[WARN]: VidPnTargetId is 0x%08lX is too high (MAX_CHILDREN is 0x%08lX)", pPath->VidPnTargetId, MAX_CHILDREN);
         return STATUS_GRAPHICS_INVALID_VIDEO_PRESENT_TARGET;
     }
     else if (pPath->GammaRamp.Type != D3DDDI_GAMMARAMP_DEFAULT)
     {
-        debug("[WARN]: pPath contains a gamma ramp (0x%016llX)", pPath->GammaRamp.Type);
+        debug("[WARN]: pPath contains a gamma ramp (0x%08lX)", pPath->GammaRamp.Type);
         return STATUS_GRAPHICS_GAMMA_RAMP_NOT_SUPPORTED;
     }
     else if ((pPath->ContentTransformation.Scaling != D3DKMDT_VPPS_IDENTITY) &&
@@ -734,7 +734,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::IsVidPnPathFieldsValid(CONST D3DKMDT_VIDPN_PRESEN
              (pPath->ContentTransformation.Scaling != D3DKMDT_VPPS_NOTSPECIFIED) &&
              (pPath->ContentTransformation.Scaling != D3DKMDT_VPPS_UNINITIALIZED))
     {
-        debug("[WARN]: pPath contains a non-identity scaling (0x%016llX)", pPath->ContentTransformation.Scaling);
+        debug("[WARN]: pPath contains a non-identity scaling (0x%08lX)", pPath->ContentTransformation.Scaling);
         return STATUS_GRAPHICS_VIDPN_MODALITY_NOT_SUPPORTED;
     }
     else if ((pPath->ContentTransformation.Rotation != D3DKMDT_VPPR_IDENTITY) &&
@@ -742,13 +742,13 @@ NTSTATUS BASIC_DISPLAY_DRIVER::IsVidPnPathFieldsValid(CONST D3DKMDT_VIDPN_PRESEN
              (pPath->ContentTransformation.Rotation != D3DKMDT_VPPR_NOTSPECIFIED) &&
              (pPath->ContentTransformation.Rotation != D3DKMDT_VPPR_UNINITIALIZED))
     {
-        debug("[WARN]: pPath contains a not-supported rotation (0x%016llX)", pPath->ContentTransformation.Rotation);
+        debug("[WARN]: pPath contains a not-supported rotation (0x%08lX)", pPath->ContentTransformation.Rotation);
         return STATUS_GRAPHICS_VIDPN_MODALITY_NOT_SUPPORTED;
     }
     else if ((pPath->VidPnTargetColorBasis != D3DKMDT_CB_SCRGB) &&
              (pPath->VidPnTargetColorBasis != D3DKMDT_CB_UNINITIALIZED))
     {
-        debug("[WARN]: pPath has a non-linear RGB color basis (0x%016llX)", pPath->VidPnTargetColorBasis);
+        debug("[WARN]: pPath has a non-linear RGB color basis (0x%08lX)", pPath->VidPnTargetColorBasis);
         return STATUS_GRAPHICS_INVALID_VIDEO_PRESENT_SOURCE_MODE;
     }
     else
@@ -763,18 +763,18 @@ NTSTATUS BASIC_DISPLAY_DRIVER::IsVidPnSourceModeFieldsValid(CONST D3DKMDT_VIDPN_
 
     if (pSourceMode->Type != D3DKMDT_RMT_GRAPHICS)
     {
-        debug("[WARN]: pSourceMode is a non-graphics mode (0x%016llX)", pSourceMode->Type);
+        debug("[WARN]: pSourceMode is a non-graphics mode (0x%08lX)", pSourceMode->Type);
         return STATUS_GRAPHICS_INVALID_VIDEO_PRESENT_SOURCE_MODE;
     }
     else if ((pSourceMode->Format.Graphics.ColorBasis != D3DKMDT_CB_SCRGB) &&
              (pSourceMode->Format.Graphics.ColorBasis != D3DKMDT_CB_UNINITIALIZED))
     {
-        debug("[WARN]: pSourceMode has a non-linear RGB color basis (0x%016llX)", pSourceMode->Format.Graphics.ColorBasis);
+        debug("[WARN]: pSourceMode has a non-linear RGB color basis (0x%08lX)", pSourceMode->Format.Graphics.ColorBasis);
         return STATUS_GRAPHICS_INVALID_VIDEO_PRESENT_SOURCE_MODE;
     }
     else if (pSourceMode->Format.Graphics.PixelValueAccessMode != D3DKMDT_PVAM_DIRECT)
     {
-        debug("[WARN]: pSourceMode has a palettized access mode (0x%016llX)", pSourceMode->Format.Graphics.PixelValueAccessMode);
+        debug("[WARN]: pSourceMode has a palettized access mode (0x%08lX)", pSourceMode->Format.Graphics.PixelValueAccessMode);
         return STATUS_GRAPHICS_INVALID_VIDEO_PRESENT_SOURCE_MODE;
     }
     else
@@ -786,7 +786,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::IsVidPnSourceModeFieldsValid(CONST D3DKMDT_VIDPN_
                 return STATUS_SUCCESS;
             }
         }
-        debug("[WARN]: pSourceMode has an unknown pixel format (0x%016llX)", pSourceMode->Format.Graphics.PixelFormat);
+        debug("[WARN]: pSourceMode has an unknown pixel format (0x%08lX)", pSourceMode->Format.Graphics.PixelFormat);
         return STATUS_GRAPHICS_INVALID_VIDEO_PRESENT_SOURCE_MODE;
     }
 }
@@ -799,8 +799,7 @@ struct SampleSourceMode
 };
 
 // The driver will advertise all modes that fit within the actual required mode (see AddSingleSourceMode below)
-//const static SampleSourceMode C_SampleSourceMode[] = {{800,600},{1024,768},{1152,864},{1280,800},{1280,1024},{1400,1050},{1600,1200},{1680,1050},{1920,1200}}; // <-- UTTER RUBBISH
-const static SampleSourceMode C_SampleSourceMode[] = {{1920,1080}}; // <-- ALSO UTTER RUBBISH
+const static SampleSourceMode C_SampleSourceMode[] = {{800,600},{1024,768},{1152,864},{1280,800},{1280,1024},{1400,1050},{1600,1200},{1680,1050},{1920,1200}}; // <-- UTTER RUBBISH
 const static UINT C_SampleSourceModeMax = sizeof(C_SampleSourceMode)/sizeof(C_SampleSourceMode[0]);
 
 NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMODESET_INTERFACE* pVidPnSourceModeSetInterface,
@@ -811,15 +810,15 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
 
     // There is only one source format supported by display-only drivers, but more can be added in a 
     // full WDDM driver if the hardware supports them
-    // for (UINT PelFmtIdx = 0; PelFmtIdx < ARRAYSIZE(gBddPixelFormats); ++PelFmtIdx)
-    // {
+    for (UINT PelFmtIdx = 0; PelFmtIdx < ARRAYSIZE(gBddPixelFormats); ++PelFmtIdx)
+    {
         // Create new mode info that will be populated
         D3DKMDT_VIDPN_SOURCE_MODE* pVidPnSourceModeInfo = NULL;
         NTSTATUS Status = pVidPnSourceModeSetInterface->pfnCreateNewModeInfo(hVidPnSourceModeSet, &pVidPnSourceModeInfo);
         if (!NT_SUCCESS(Status))
         {
             // If failed to create a new mode info, mode doesn't need to be released since it was never created
-            debug("[WARN]: pfnCreateNewModeInfo failed with Status = 0x%016llX, hVidPnSourceModeSet = 0x%016llX", Status, hVidPnSourceModeSet);
+            debug("[WARN]: pfnCreateNewModeInfo failed with Status = 0x%08lX, hVidPnSourceModeSet = %p", Status, hVidPnSourceModeSet);
             return Status;
         }
 
@@ -835,7 +834,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
         pVidPnSourceModeInfo->Format.Graphics.Stride = m_CurrentModes[SourceId].DispInfo.Pitch;
         debug("[INFO]: Pitch: %u (0x%04X)", m_CurrentModes[SourceId].DispInfo.Pitch, m_CurrentModes[SourceId].DispInfo.Pitch);
         debug("[INFO]: Stride: %u (0x%04X)", pVidPnSourceModeInfo->Format.Graphics.Stride, pVidPnSourceModeInfo->Format.Graphics.Stride);
-        pVidPnSourceModeInfo->Format.Graphics.PixelFormat = m_CurrentModes[SourceId].DispInfo.ColorFormat; //gBddPixelFormats[PelFmtIdx]; // <-- NONSENSE.
+        pVidPnSourceModeInfo->Format.Graphics.PixelFormat = gBddPixelFormats[PelFmtIdx]; // <-- NONSENSE.
         pVidPnSourceModeInfo->Format.Graphics.ColorBasis = D3DKMDT_CB_SCRGB;
         pVidPnSourceModeInfo->Format.Graphics.PixelValueAccessMode = D3DKMDT_PVAM_DIRECT;
 
@@ -850,81 +849,56 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMO
 
             if (Status != STATUS_GRAPHICS_MODE_ALREADY_IN_MODESET)
             {
-                debug("[WARN]: pfnAddMode1 failed with Status = 0x%016llX, hVidPnSourceModeSet = 0x%016llX, pVidPnSourceModeInfo = 0x%016llX", Status, hVidPnSourceModeSet, pVidPnSourceModeInfo);
+                debug("[WARN]: pfnAddMode1 failed with Status = 0x%08lX, hVidPnSourceModeSet = %p, pVidPnSourceModeInfo = %p", Status, hVidPnSourceModeSet, pVidPnSourceModeInfo);
                 return Status;
             }
         }
-    // }
-
-    // UINT WidthMax = m_CurrentModes[SourceId].DispInfo.Width;
-    // UINT HeightMax = m_CurrentModes[SourceId].DispInfo.Height;
+    }
 
     // Add all predefined modes that fit within the bounds of the required (POST) mode
-    
-    // for (UINT ModeIndex = 0; ModeIndex < C_SampleSourceModeMax; ++ModeIndex)
-    // {
-        /*if (C_SampleSourceMode[ModeIndex].ModeWidth > WidthMax)
-        {
-            break;
-        }
-        else if (C_SampleSourceMode[ModeIndex].ModeWidth == WidthMax)
-        {
-            if(C_SampleSourceMode[ModeIndex].ModeHeight >= HeightMax)
-            {
-                break;
-            }
-        }
-        else
-        {
-            if(C_SampleSourceMode[ModeIndex].ModeHeight > HeightMax)
-            {
-                continue;
-            }
-        }
-        */
+    for (UINT ModeIndex = 0; ModeIndex < C_SampleSourceModeMax; ++ModeIndex)
+    {
         // There is only one source format supported by display-only drivers, but more can be added in a 
         // full WDDM driver if the hardware supports them
-        //for (UINT PelFmtIdx = 0; PelFmtIdx < ARRAYSIZE(gBddPixelFormats); ++PelFmtIdx)
-        //{
+        for (UINT PelFmtIdx = 0; PelFmtIdx < ARRAYSIZE(gBddPixelFormats); ++PelFmtIdx)
+        {
             // Create new mode info that will be populated
-            //D3DKMDT_VIDPN_SOURCE_MODE* pVidPnSourceModeInfo = NULL;
-            //NTSTATUS Status = pVidPnSourceModeSetInterface->pfnCreateNewModeInfo(hVidPnSourceModeSet, &pVidPnSourceModeInfo);
-            D3DKMDT_VIDPN_SOURCE_MODE* pVidPnSourceModeInfo2 = NULL;
-            Status = pVidPnSourceModeSetInterface->pfnCreateNewModeInfo(hVidPnSourceModeSet, &pVidPnSourceModeInfo2);
+            D3DKMDT_VIDPN_SOURCE_MODE* pVidPnSourceModeInfo = NULL;
+            NTSTATUS Status = pVidPnSourceModeSetInterface->pfnCreateNewModeInfo(hVidPnSourceModeSet, &pVidPnSourceModeInfo);
             if (!NT_SUCCESS(Status))
             {
                 // If failed to create a new mode info, continuing to the next mode and trying again isn't going to be at all helpful, so return
                 // Also, mode doesn't need to be released since it was never created
-                debug("[WARN]: pfnCreateNewModeInfo failed with Status = 0x%016llX, hVidPnSourceModeSet = 0x%016llX", Status, hVidPnSourceModeSet);
+                debug("[WARN]: pfnCreateNewModeInfo failed with Status = 0x%08lX, hVidPnSourceModeSet = %p", Status, hVidPnSourceModeSet);
                 return Status;
             }
 
             // Populate mode info with values from mode at ModeIndex and hard-coded values
             // Always report 32 bpp format, this will be color converted during the present if the mode at ModeIndex was < 32bpp
-            pVidPnSourceModeInfo2->Type = D3DKMDT_RMT_GRAPHICS;
-            pVidPnSourceModeInfo2->Format.Graphics.PrimSurfSize.cx = m_CurrentModes[SourceId].DispInfo.Width; //C_SampleSourceMode[ModeIndex].ModeWidth; // <-- GIBBERISH
-            pVidPnSourceModeInfo2->Format.Graphics.PrimSurfSize.cy = m_CurrentModes[SourceId].DispInfo.Height; //C_SampleSourceMode[ModeIndex].ModeHeight; // <-- GIBBERISH
-            pVidPnSourceModeInfo2->Format.Graphics.VisibleRegionSize = pVidPnSourceModeInfo2->Format.Graphics.PrimSurfSize;
-            pVidPnSourceModeInfo2->Format.Graphics.Stride = m_CurrentModes[SourceId].DispInfo.Pitch; //4*C_SampleSourceMode[ModeIndex].ModeWidth; // <-- TEMPORARY SOLUTION
-            pVidPnSourceModeInfo2->Format.Graphics.PixelFormat = m_CurrentModes[SourceId].DispInfo.ColorFormat; //gBddPixelFormats[PelFmtIdx]; // <-- TEMPORARY SOLUTION
-            pVidPnSourceModeInfo2->Format.Graphics.ColorBasis = D3DKMDT_CB_SCRGB;
-            pVidPnSourceModeInfo2->Format.Graphics.PixelValueAccessMode = D3DKMDT_PVAM_DIRECT;
+            pVidPnSourceModeInfo->Type = D3DKMDT_RMT_GRAPHICS;
+            pVidPnSourceModeInfo->Format.Graphics.PrimSurfSize.cx = C_SampleSourceMode[ModeIndex].ModeWidth; // <-- GIBBERISH
+            pVidPnSourceModeInfo->Format.Graphics.PrimSurfSize.cy = C_SampleSourceMode[ModeIndex].ModeHeight; // <-- GIBBERISH
+            pVidPnSourceModeInfo->Format.Graphics.VisibleRegionSize = pVidPnSourceModeInfo->Format.Graphics.PrimSurfSize; // <-- GIBBERISH
+            pVidPnSourceModeInfo->Format.Graphics.Stride = 4*C_SampleSourceMode[ModeIndex].ModeWidth; // <-- GIBBERISH
+            pVidPnSourceModeInfo->Format.Graphics.PixelFormat = gBddPixelFormats[PelFmtIdx]; // <-- GIBBERISH
+            pVidPnSourceModeInfo->Format.Graphics.ColorBasis = D3DKMDT_CB_SCRGB;
+            pVidPnSourceModeInfo->Format.Graphics.PixelValueAccessMode = D3DKMDT_PVAM_DIRECT;
 
             // Add the mode to the source mode set
-            Status = pVidPnSourceModeSetInterface->pfnAddMode(hVidPnSourceModeSet, pVidPnSourceModeInfo2);
+            Status = pVidPnSourceModeSetInterface->pfnAddMode(hVidPnSourceModeSet, pVidPnSourceModeInfo);
             if (!NT_SUCCESS(Status))
             {
                 if (Status != STATUS_GRAPHICS_MODE_ALREADY_IN_MODESET)
                 {
-                    debug("[WARN]: pfnAddMode2 failed with Status = 0x%016llX, hVidPnSourceModeSet = 0x%016llX, pVidPnSourceModeInfo = 0x%016llX", Status, hVidPnSourceModeSet, pVidPnSourceModeInfo2);
+                    debug("[WARN]: pfnAddMode2 failed with Status = 0x%08lX, hVidPnSourceModeSet = %p, pVidPnSourceModeInfo = %p", Status, hVidPnSourceModeSet, pVidPnSourceModeInfo);
                 }
 
                 // If adding the mode failed, release the mode, if this doesn't work there is nothing that can be done, some memory will get leaked, continue to next mode anyway
-                Status = pVidPnSourceModeSetInterface->pfnReleaseModeInfo(hVidPnSourceModeSet, pVidPnSourceModeInfo2);
+                Status = pVidPnSourceModeSetInterface->pfnReleaseModeInfo(hVidPnSourceModeSet, pVidPnSourceModeInfo);
                 if (!(NT_SUCCESS(Status))) { debug("[ASRT]: (pVidPnSourceModeInfo) | NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode"); return STATUS_ABANDONED; }
             }
-        //}
-    //}
+        }
+    }
     return STATUS_SUCCESS;
 }
 
@@ -940,7 +914,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleTargetMode(_In_ CONST DXGK_VIDPNTARGETMO
     if (!NT_SUCCESS(Status))
     {
         // If failed to create a new mode info, mode doesn't need to be released since it was never created
-        debug("[WARN]: pfnCreateNewModeInfo failed with Status = 0x%016llX, hVidPnTargetModeSet = 0x%016llX", Status, hVidPnTargetModeSet);
+        debug("[WARN]: pfnCreateNewModeInfo failed with Status = 0x%08lX, hVidPnTargetModeSet = %p", Status, hVidPnTargetModeSet);
         return Status;
     }
 
@@ -964,7 +938,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleTargetMode(_In_ CONST DXGK_VIDPNTARGETMO
     {
         if (Status != STATUS_GRAPHICS_MODE_ALREADY_IN_MODESET)
         {
-            debug("[WARN]: pfnAddMode3 failed with Status = 0x%016llX, hVidPnTargetModeSet = 0x%016llX, pVidPnTargetModeInfo = 0x%016llX", Status, hVidPnTargetModeSet, pVidPnTargetModeInfo);
+            debug("[WARN]: pfnAddMode3 failed with Status = 0x%08lX, hVidPnTargetModeSet = %p, pVidPnTargetModeInfo = %p", Status, hVidPnTargetModeSet, pVidPnTargetModeInfo);
         }
         else
         {
@@ -992,7 +966,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleMonitorMode(_In_ CONST DXGKARG_RECOMMEND
     if (!NT_SUCCESS(Status))
     {
         // If failed to create a new mode info, mode doesn't need to be released since it was never created
-        debug("[WARN]: pfnCreateNewModeInfo failed with Status = 0x%016llX, hMonitorSourceModeSet = 0x%016llX", Status, pRecommendMonitorModes->hMonitorSourceModeSet);
+        debug("[WARN]: pfnCreateNewModeInfo failed with Status = 0x%08lX, hMonitorSourceModeSet = %p", Status, pRecommendMonitorModes->hMonitorSourceModeSet);
         return Status;
     }
 
@@ -1024,7 +998,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleMonitorMode(_In_ CONST DXGKARG_RECOMMEND
     {
         if (Status != STATUS_GRAPHICS_MODE_ALREADY_IN_MODESET)
         {
-            debug("[WARN]: pfnAddMode4 failed with Status = 0x%016llX, hMonitorSourceModeSet = 0x%016llX, pMonitorSourceMode = 0x%016llX",
+            debug("[WARN]: pfnAddMode4 failed with Status = 0x%08lX, hMonitorSourceModeSet = %p, pMonitorSourceMode = %p",
                             Status, pRecommendMonitorModes->hMonitorSourceModeSet, pMonitorSourceMode);
         }
         else

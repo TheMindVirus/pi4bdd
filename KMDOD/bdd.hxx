@@ -1,6 +1,14 @@
 #ifndef _BDD_HXX_
 #define _BDD_HXX_
 
+#ifdef NDEBUG
+#define debug(...)
+#else
+#define DBG   1
+#define debug(...)   KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, __VA_ARGS__)); \
+                     KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL, "\n"));
+#endif//NDEBUG
+
 extern "C"
 {
     #define __CPLUSPLUS
@@ -44,7 +52,6 @@ extern "C"
 #define EDID_V1_BLOCK_SIZE 128
 
 #include "mbox.hxx"
-#include "debug.hxx"
 
 #define MIN_WIDTH                    640
 #define MIN_HEIGHT                   480
@@ -215,6 +222,25 @@ public:
     // Must be Non-Paged
     VOID ResetDevice(VOID);
 
+    //====================[Variables from PiX-iES]======================
+
+    PULONG    mbox_base;
+    PULONG    mbox_packet;
+
+    ADDRESS   dev_framebuffer1;
+    VALUE     dev_pitchspace1;
+
+    ADDRESS   dev_framebuffer2;
+    VALUE     dev_pitchspace2;
+
+    void mbox_mmio_setup();
+    void mbox_mmio_cleanup();
+
+    VALUE mbox_setup(BYTE channel);
+    void mbox_set_display(VALUE display);
+    void mbox_get_display_info();
+
+    //==================================================================
 
     const CURRENT_BDD_MODE* GetCurrentMode(UINT SourceId) const
     {
@@ -341,7 +367,7 @@ private:
             case D3DDDIFMT_R8G8B8: return 24;
             case D3DDDIFMT_X8R8G8B8: // fall through
             case D3DDDIFMT_A8R8G8B8: return 32;
-            default: debug("[WARN]: Unknown D3DDDIFORMAT 0x%016llX", Format); return 0;
+            default: debug("[WARN]: Unknown D3DDDIFORMAT 0x%08lX", Format); return 0;
         }
     }
 
@@ -354,7 +380,7 @@ private:
             case 16: return D3DDDIFMT_R5G6B5;
             case 24: return D3DDDIFMT_R8G8B8;
             case 32: return D3DDDIFMT_X8R8G8B8;
-            default: debug("[WARN]: A bit per pixel of 0x%016llX is not supported.", BPP); return D3DDDIFMT_UNKNOWN;
+            default: debug("[WARN]: A bit per pixel of 0x%08lX is not supported.", BPP); return D3DDDIFMT_UNKNOWN;
         }
     }
 
@@ -392,9 +418,6 @@ private:
                                  D3DKMDT_HVIDPNTARGETMODESET hVidPnTargetModeSet,
                                  _In_opt_ CONST D3DKMDT_VIDPN_SOURCE_MODE* pVidPnPinnedSourceModeInfo,
                                  D3DDDI_VIDEO_PRESENT_SOURCE_ID SourceId);
-
-    // Check that the hardware the driver is running on is hardware it is capable of driving.
-    NTSTATUS CheckHardware();
 
     // Helper function for RegisterHWInfo
     NTSTATUS WriteHWInfoStr(_In_ HANDLE DevInstRegKeyHandle, _In_ PCWSTR pszwValueName, _In_ PCSTR pszValue);

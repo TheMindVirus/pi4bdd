@@ -44,7 +44,7 @@ extern "C" NTSTATUS DriverEntry
     NTSTATUS Status = DxgkInitializeDisplayOnlyDriver(pDriverObject, pRegistryPath, &InitialData);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: DxgkInitializeDisplayOnlyDriver failed with Status: 0x%016llX", Status);
+        debug("[WARN]: DxgkInitializeDisplayOnlyDriver failed with Status: 0x%08lX", Status);
         return Status;
     }
     return Status;
@@ -66,7 +66,7 @@ NTSTATUS BddDdiAddDevice
     if ((pPhysicalDeviceObject == NULL) ||
         (ppDeviceContext == NULL))
     {
-        debug("[WARN]: One of pPhysicalDeviceObject (0x%016llX), ppDeviceContext (0x%016llX) is NULL",
+        debug("[WARN]: One of pPhysicalDeviceObject (0x%08lX), ppDeviceContext (0x%08lX) is NULL",
                         pPhysicalDeviceObject, ppDeviceContext);
         return STATUS_INVALID_PARAMETER;
     }
@@ -135,7 +135,7 @@ NTSTATUS BddDdiDispatchIoRequest
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
     if (!pBDD->IsDriverActive())
     {
-        debug("BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->DispatchIoRequest(VidPnSourceId, pVideoRequestPacket);
@@ -205,7 +205,7 @@ NTSTATUS BddDdiQueryDeviceDescriptor
         // The first call queues a worker thread item indicating that it now has a child device, the second queues a worker thread
         // item that it no longer has any child device. This function gets called based on the first worker thread item, but after
         // the driver has been stopped. Therefore instead of asserting like other functions, we only warn.
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->QueryDeviceDescriptor(ChildUid, pDeviceDescriptor);
@@ -238,7 +238,7 @@ NTSTATUS APIENTRY BddDdiSetPointerPosition
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->SetPointerPosition(pSetPointerPosition);
@@ -255,7 +255,7 @@ NTSTATUS APIENTRY BddDdiSetPointerShape
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->SetPointerShape(pSetPointerShape);
@@ -272,7 +272,7 @@ NTSTATUS APIENTRY BddDdiPresentDisplayOnly
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->PresentDisplayOnly(pPresentDisplayOnly);
@@ -305,7 +305,7 @@ NTSTATUS APIENTRY BddDdiIsSupportedVidPn
         // This path might hit because win32k/dxgport doesn't check that an adapter is active when taking the adapter lock.
         // The adapter lock is the main thing BDD Fallback relies on to not be called while it's inactive. It is still a rare
         // timing issue around PnpStart/Stop and isn't expected to have any effect on the stability of the system.
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     //if (!(pIsSupportedVidPn != NULL)) { debug("[ASRT]: (pIsSupportedVidPn = NULL) | NTSTATUS APIENTRY BddDdiIsSupportedVidPn"); return STATUS_UNSUCCESSFUL; }
@@ -325,7 +325,7 @@ NTSTATUS APIENTRY BddDdiRecommendFunctionalVidPn
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->RecommendFunctionalVidPn(pRecommendFunctionalVidPn);
@@ -342,7 +342,7 @@ NTSTATUS APIENTRY BddDdiRecommendVidPnTopology
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->RecommendVidPnTopology(pRecommendVidPnTopology);
@@ -359,7 +359,7 @@ NTSTATUS APIENTRY BddDdiRecommendMonitorModes
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->RecommendMonitorModes(pRecommendMonitorModes);
@@ -376,7 +376,7 @@ NTSTATUS APIENTRY BddDdiEnumVidPnCofuncModality
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->EnumVidPnCofuncModality(pEnumCofuncModality);
@@ -393,7 +393,7 @@ NTSTATUS APIENTRY BddDdiSetVidPnSourceVisibility
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->SetVidPnSourceVisibility(pSetVidPnSourceVisibility);
@@ -410,7 +410,7 @@ NTSTATUS APIENTRY BddDdiCommitVidPn
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->CommitVidPn(pCommitVidPn);
@@ -427,7 +427,7 @@ NTSTATUS APIENTRY BddDdiUpdateActiveVidPnPresentPath
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->UpdateActiveVidPnPresentPath(pUpdateActiveVidPnPresentPath);
@@ -444,7 +444,7 @@ NTSTATUS APIENTRY BddDdiQueryVidPnHWCapability
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return STATUS_UNSUCCESSFUL;
     }
     return pBDD->QueryVidPnHWCapability(pVidPnHWCaps);
@@ -460,7 +460,7 @@ VOID BddDdiDpcRoutine
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
     if (!pBDD->IsDriverActive())
     {
-        debug("[WARN]: BDD (0x%016llX) is being called when not active!", pBDD);
+        debug("[WARN]: BDD (0x%08lX) is being called when not active!", pBDD);
         return;
     }
     pBDD->DpcRoutine();

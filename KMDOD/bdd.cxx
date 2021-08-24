@@ -11,9 +11,9 @@ BASIC_DISPLAY_DRIVER::BASIC_DISPLAY_DRIVER(_In_ DEVICE_OBJECT* pPhysicalDeviceOb
     RtlZeroMemory(&m_StartInfo, sizeof(m_StartInfo));
     RtlZeroMemory(m_CurrentModes, sizeof(m_CurrentModes));
     RtlZeroMemory(&m_DeviceInfo, sizeof(m_DeviceInfo));
-    for (UINT i=0;i<MAX_VIEWS;i++)
+    for (UINT i = 0; i < MAX_VIEWS; ++i)
     {
-        m_HardwareBlt[i].Initialize(this,i);
+        m_HardwareBlt[i].Initialize(this, i);
     }
 }
 
@@ -39,55 +39,42 @@ NTSTATUS BASIC_DISPLAY_DRIVER::StartDevice
     RtlCopyMemory(&m_StartInfo, pDxgkStartInfo, sizeof(m_StartInfo));
     RtlCopyMemory(&m_DxgkInterface, pDxgkInterface, sizeof(m_DxgkInterface));
     RtlZeroMemory(m_CurrentModes, sizeof(m_CurrentModes));
-    m_CurrentModes[0].DispInfo.TargetId = D3DDDI_ID_UNINITIALIZED; // <-- ???
+    m_CurrentModes[0].DispInfo.TargetId = D3DDDI_ID_UNINITIALIZED;
+    NTSTATUS Status = STATUS_SUCCESS;
+
+    Status = m_DxgkInterface.DxgkCbGetDeviceInformation(m_DxgkInterface.DeviceHandle, &m_DeviceInfo);
+    if (!NT_SUCCESS(Status))
+    {
+        debug("[WARN]: DxgkCbGetDeviceInformation failed with status 0x%08lX", Status);
+        return Status;
+    }
 
     // Get device information from OS.
+    RegisterHWInfo();
+    
     mbox_mmio_setup();
     mbox_get_display_info();
-    debug("[MBOX]: dev_pitchspace2 = 0x%016llX", dev_pitchspace2);
+    debug("[MBOX]: dev_pitchspace2 = 0x%08lX", dev_pitchspace2);
     m_CurrentModes[0].DispInfo.Width = 1920; // <-- TEMPORARY SOLUTION
     m_CurrentModes[0].DispInfo.Height = 1080; // <-- TEMPORARY SOLUTION
     m_CurrentModes[0].DispInfo.PhysicAddress.QuadPart = dev_framebuffer2;
     m_CurrentModes[0].DispInfo.Pitch = dev_pitchspace2; // 0x1E00 reported by the mailbox may cause STATUS_GRAPHICS_INVALID_STRIDE (0xC01E033C)
     m_CurrentModes[0].DispInfo.ColorFormat = D3DDDIFMT_A8R8G8B8;
-
-    // NTSTATUS Status = m_DxgkInterface.DxgkCbGetDeviceInformation(m_DxgkInterface.DeviceHandle, &m_DeviceInfo);
-    // if (!NT_SUCCESS(Status))
-    // {
-    //     debug("[WARN]: DxgkCbGetDeviceInformation failed with status 0x%016llX", Status);
-    //     return Status;
-    // }
-    // 
-    // Ignore return value, since it's not the end of the world if we failed to write these values to the registry
-    // RegisterHWInfo();
-    // TODO: Uncomment the line below after updating the TODOs in the function CheckHardware
-    // Status = CheckHardware();
-    // if (!NT_SUCCESS(Status))
-    // {
-    //    debug("[WARN]: CheckHardware failed with status 0x%016llX", Status);
-    //    return Status;
-    // }
-    // This sample driver only uses the frame buffer of the POST device. DxgkCbAcquirePostDisplayOwnership
-    // gives you the frame buffer address and ensures that no one else is drawing to it. Be sure to give it back!
-    ///!!!NOTE: The 0'th device is not a POST device, it is in Mode 5!!! This is an invalid sample driver!!! >:(
-
-    //debug("[INFO]: HighestPhysicalAddress: 0x%016llX", m_DeviceInfo.HighestPhysicalAddress);
-    //debug("[INFO]: AgpApertureBase: 0x%016llX", m_DeviceInfo.AgpApertureBase);
-    //debug("[INFO]: AgpApertureSize: 0x%016llX", m_DeviceInfo.AgpApertureSize);
     
-    // Status = m_DxgkInterface.DxgkCbAcquirePostDisplayOwnership(m_DxgkInterface.DeviceHandle, &(m_CurrentModes[0].DispInfo));
-    // if (!NT_SUCCESS(Status) || m_CurrentModes[0].DispInfo.Width == 0)
-    // {
-    //     // The most likely cause of failure is that the driver is simply not running on a POST device, or we are running
-    //     // after a pre-WDDM 1.2 driver. Since we can't draw anything, we should fail to start.
-    //     debug("[WARN]: DxgkCbAcquirePostDisplayOwnership failed with status 0x%016llX (width = 0, not running on a BIOS POST device?)", Status);
-    //     return STATUS_UNSUCCESSFUL;
-    // }
-
+    /*
+    Status = m_DxgkInterface.DxgkCbAcquirePostDisplayOwnership(m_DxgkInterface.DeviceHandle, &(m_CurrentModes[0].DispInfo));
+    if (!NT_SUCCESS(Status) || m_CurrentModes[0].DispInfo.Width == 0)
+    {
+         // The most likely cause of failure is that the driver is simply not running on a POST device, or we are running
+         // after a pre-WDDM 1.2 driver. Since we can't draw anything, we should fail to start.
+         debug("[WARN]: DxgkCbAcquirePostDisplayOwnership failed with status 0x%08lX (width = 0, not running on a BIOS POST device?)", Status);
+         return STATUS_UNSUCCESSFUL;
+    }
+    */
     m_Flags.DriverStarted = TRUE;
     *pNumberOfViews = MAX_VIEWS;
     *pNumberOfChildren = MAX_CHILDREN;
-   return STATUS_SUCCESS;
+    return STATUS_SUCCESS;
 }
 
 NTSTATUS BASIC_DISPLAY_DRIVER::StopDevice(VOID)
@@ -135,7 +122,10 @@ NTSTATUS BASIC_DISPLAY_DRIVER::SetPowerState
     debug("[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::SetPowerState");
     UNREFERENCED_PARAMETER(ActionType);
     if (!((HardwareUid < MAX_CHILDREN) || (HardwareUid == DISPLAY_ADAPTER_HW_ID)))
-        { debug("[ASRT]: ((HardwareUid >= MAX_CHILDREN) || (HardwareUid != DISPLAY_ADAPTER_HW_ID)) | NTSTATUS BASIC_DISPLAY_DRIVER::SetPowerState"); return STATUS_ABANDONED; }
+    {
+        debug("[ASRT]: ((HardwareUid >= MAX_CHILDREN) || (HardwareUid != DISPLAY_ADAPTER_HW_ID)) | NTSTATUS BASIC_DISPLAY_DRIVER::SetPowerState");
+        return STATUS_ABANDONED;
+    }
     if (HardwareUid == DISPLAY_ADAPTER_HW_ID)
     {
         if (DevicePowerState == PowerDeviceD0)
@@ -214,7 +204,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryChildStatus
         }
         default:
         {
-            debug("[WARN]: Unknown pChildStatus->Type (0x%016llX) requested.", pChildStatus->Type);
+            debug("[WARN]: Unknown pChildStatus->Type (0x%08lX) requested.", pChildStatus->Type);
             return STATUS_NOT_SUPPORTED;
         }
     }
@@ -243,8 +233,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryDeviceDescriptor
     else if (pDeviceDescriptor->DescriptorOffset == 0)
     {
         // Only the base block is supported
-        RtlCopyMemory(pDeviceDescriptor->DescriptorBuffer,
-                      m_EDIDs[ChildUid],
+        RtlCopyMemory(pDeviceDescriptor->DescriptorBuffer, m_EDIDs[ChildUid],
                       min(pDeviceDescriptor->DescriptorLength, EDID_V1_BLOCK_SIZE));
         return STATUS_SUCCESS;
     }
@@ -272,7 +261,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryAdapterInfo(_In_ CONST DXGKARG_QUERYADAPTERI
         {
             //DXGK_QUERYINTEGRATEDDISPLAYOUT* pQueryIntegratedDisplayOut = (DXGK_QUERYINTEGRATEDDISPLAYOUT*)pQueryAdapterInfo->pOutputData;
             //RtlZeroMemory(pQueryIntegratedDisplayOut, sizeof(DXGK_QUERYINTEGRATEDDISPLAYOUT));
-            debug("[WARN]: DXGKQAITYPE_DISPLAYID_DESCRIPTOR Not Supported", pQueryAdapterInfo->Type);
+            debug("[WARN]: DXGKQAITYPE_DISPLAYID_DESCRIPTOR Not Supported (Type: 0x%08lX)", pQueryAdapterInfo->Type);
             //pQueryIntegratedDisplayOut->Colorimetry = DXGK_COLORIMETRY::;
             return STATUS_ABANDONED;
         }
@@ -282,7 +271,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryAdapterInfo(_In_ CONST DXGKARG_QUERYADAPTERI
         {
             if (pQueryAdapterInfo->OutputDataSize < sizeof(DXGK_DRIVERCAPS))
             {
-                debug("[WARN]: pQueryAdapterInfo->OutputDataSize (0x%016llX) is smaller than sizeof(DXGK_DRIVERCAPS) (0x%016llX)", pQueryAdapterInfo->OutputDataSize, sizeof(DXGK_DRIVERCAPS));
+                debug("[WARN]: pQueryAdapterInfo->OutputDataSize (0x%08lu) is smaller than sizeof(DXGK_DRIVERCAPS) (0x%016llu)", pQueryAdapterInfo->OutputDataSize, sizeof(DXGK_DRIVERCAPS));
                 return STATUS_BUFFER_TOO_SMALL;
             }
             DXGK_DRIVERCAPS* pDriverCaps = (DXGK_DRIVERCAPS*)pQueryAdapterInfo->pOutputData;
@@ -301,9 +290,8 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryAdapterInfo(_In_ CONST DXGKARG_QUERYADAPTERI
             DXGK_DISPLAY_DRIVERCAPS_EXTENSION* pDriverDisplayCaps;
             if (pQueryAdapterInfo->OutputDataSize < sizeof(*pDriverDisplayCaps))
             {
-                debug("[WARN]: pQueryAdapterInfo->OutputDataSize (0x%016llX) is smaller than sizeof(DXGK_DISPLAY_DRIVERCAPS_EXTENSION) (0x%016llX)",
-                               pQueryAdapterInfo->OutputDataSize,
-                               sizeof(DXGK_DISPLAY_DRIVERCAPS_EXTENSION));
+                debug("[WARN]: pQueryAdapterInfo->OutputDataSize (0x%08lu) is smaller than sizeof(DXGK_DISPLAY_DRIVERCAPS_EXTENSION) (0x%016llu)",
+                      pQueryAdapterInfo->OutputDataSize, sizeof(DXGK_DISPLAY_DRIVERCAPS_EXTENSION));
                 return STATUS_INVALID_PARAMETER;
             }
             pDriverDisplayCaps = (DXGK_DISPLAY_DRIVERCAPS_EXTENSION*)pQueryAdapterInfo->pOutputData;
@@ -316,72 +304,10 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryAdapterInfo(_In_ CONST DXGKARG_QUERYADAPTERI
         default:
         {
             // BDD does not need to support any other adapter information types
-            debug("[WARN]: Unknown QueryAdapterInfo Type (0x%016llX) requested", pQueryAdapterInfo->Type);
+            debug("[WARN]: Unknown QueryAdapterInfo Type (0x%08lX) requested", pQueryAdapterInfo->Type);
             return STATUS_NOT_SUPPORTED;
         }
     }
-}
-
-NTSTATUS BASIC_DISPLAY_DRIVER::CheckHardware()
-{
-    debug("[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::CheckHardware");
-    NTSTATUS Status;
-    ULONG VendorID;
-    ULONG DeviceID;
-// TODO: If developing a driver for PCI based hardware, then use the second method to retrieve Vendor/Device IDs.
-// If developing for non-PCI based hardware (i.e. ACPI based hardware), use the first method to retrieve the IDs.
-#if 1 // ACPI-based device
-    // Get the Vendor & Device IDs on non-PCI system
-    ACPI_EVAL_INPUT_BUFFER_COMPLEX AcpiInputBuffer = {0};
-    AcpiInputBuffer.Signature = ACPI_EVAL_INPUT_BUFFER_COMPLEX_SIGNATURE;
-    AcpiInputBuffer.MethodNameAsUlong = ACPI_METHOD_HARDWARE_ID;
-    AcpiInputBuffer.Size = 0;
-    AcpiInputBuffer.ArgumentCount = 0;
-    BYTE OutputBuffer[sizeof(ACPI_EVAL_OUTPUT_BUFFER) + 0x10];
-    RtlZeroMemory(OutputBuffer, sizeof(OutputBuffer));
-    ACPI_EVAL_OUTPUT_BUFFER* pAcpiOutputBuffer = reinterpret_cast<ACPI_EVAL_OUTPUT_BUFFER*>(&OutputBuffer);
-    Status = m_DxgkInterface.DxgkCbEvalAcpiMethod(m_DxgkInterface.DeviceHandle,
-                                                  DISPLAY_ADAPTER_HW_ID,
-                                                  &AcpiInputBuffer,
-                                                  sizeof(AcpiInputBuffer),
-                                                  pAcpiOutputBuffer,
-                                                  sizeof(OutputBuffer));
-    if (!NT_SUCCESS(Status))
-    {
-        debug("[WARN]: DxgkCbReadDeviceSpace failed to get hardware IDs with status 0x%016llX", Status);
-        return Status;
-    }
-    VendorID = ((ULONG*)(pAcpiOutputBuffer->Argument[0].Data))[0];
-    DeviceID = ((ULONG*)(pAcpiOutputBuffer->Argument[0].Data))[1];
-#else // PCI-based device
-    // Get the Vendor & Device IDs on PCI system
-    PCI_COMMON_HEADER Header = {0};
-    ULONG BytesRead;
-    Status = m_DxgkInterface.DxgkCbReadDeviceSpace(m_DxgkInterface.DeviceHandle,
-                                                   DXGK_WHICHSPACE_CONFIG,
-                                                   &Header,
-                                                   0,
-                                                   sizeof(Header),
-                                                   &BytesRead);
-    if (!NT_SUCCESS(Status))
-    {
-        debug("[WARN]: DxgkCbReadDeviceSpace failed with status 0x%016llX", Status);
-        return Status;
-    }
-    VendorID = Header.VendorID;
-    DeviceID = Header.DeviceID;
-#endif
-    // TODO: Replace 0x1414 with your Vendor ID
-    if (VendorID == 0x1414)
-    {
-        switch (DeviceID)
-        {
-            // TODO: Replace the case statements below with the Device IDs supported by this driver
-            case 0x0000:
-            case 0xFFFF: return STATUS_SUCCESS;
-        }
-    }
-    return STATUS_GRAPHICS_DRIVER_MISMATCH;
 }
 
 // Even though Sample Basic Display Driver does not support hardware cursors, and reports such
@@ -417,7 +343,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::PresentDisplayOnly(_In_ CONST DXGKARG_PRESENT_DIS
     if (pPresentDisplayOnly->BytesPerPixel < MIN_BYTES_PER_PIXEL_REPORTED)
     {
         // Only >=32bpp modes are reported, therefore this Present should never pass anything less than 4 bytes per pixel
-        debug("[WARN]: pPresentDisplayOnly->BytesPerPixel is 0x%016llX, which is lower than the allowed.", pPresentDisplayOnly->BytesPerPixel);
+        debug("[WARN]: pPresentDisplayOnly->BytesPerPixel is 0x%08lX, which is lower than the allowed.", pPresentDisplayOnly->BytesPerPixel);
         return STATUS_INVALID_PARAMETER;
     }
     // If it is in monitor off state or source is not supposed to be visible, don't present anything to the screen
@@ -566,7 +492,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::WriteHWInfoStr(_In_ HANDLE DevInstRegKeyHandle, _
     Status = RtlAnsiStringToUnicodeString(&UnicodeStrValue, &AnsiStrValue, TRUE);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: RtlAnsiStringToUnicodeString failed with Status: 0x%016llX", Status);
+        debug("[WARN]: RtlAnsiStringToUnicodeString failed with Status: 0x%08lX", Status);
         return Status;
     }
     // Write the value to the registry
@@ -580,7 +506,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::WriteHWInfoStr(_In_ HANDLE DevInstRegKeyHandle, _
     RtlFreeUnicodeString(&UnicodeStrValue);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: ZwSetValueKey failed with Status: 0x%016llX", Status);
+        debug("[WARN]: ZwSetValueKey failed with Status: 0x%08lX", Status);
     }
     return Status;
 }
@@ -590,39 +516,39 @@ NTSTATUS BASIC_DISPLAY_DRIVER::RegisterHWInfo()
     debug("[CALL]: NTSTATUS BASIC_DISPLAY_DRIVER::RegisterHWInfo");
     NTSTATUS Status;
     // TODO: Replace these strings with proper information
-    PCSTR StrHWInfoChipType = "Replace with the chip name";
-    PCSTR StrHWInfoDacType = "Replace with the DAC name or identifier (ID)";
-    PCSTR StrHWInfoAdapterString = "Replace with the name of the adapter";
-    PCSTR StrHWInfoBiosString = "Replace with information about the BIOS";
+    PCSTR StrHWInfoChipType = "Broadcom VideoCore IV";
+    PCSTR StrHWInfoDacType = "PixelValve (CRTC)";
+    PCSTR StrHWInfoAdapterString = "Raspberry Pi 4 Basic Display Driver";
+    PCSTR StrHWInfoBiosString = "Raspberry Pi 4 Basic Display Driver";
     HANDLE DevInstRegKeyHandle;
     Status = IoOpenDeviceRegistryKey(m_pPhysicalDevice, PLUGPLAY_REGKEY_DRIVER, KEY_SET_VALUE, &DevInstRegKeyHandle);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: IoOpenDeviceRegistryKey failed for PDO: 0x%016llX, Status: 0x%016llX", m_pPhysicalDevice, Status);
+        debug("[WARN]: IoOpenDeviceRegistryKey failed for PDO: %p, Status: 0x%08lX", m_pPhysicalDevice, Status);
         return Status;
     }
     Status = WriteHWInfoStr(DevInstRegKeyHandle, L"HardwareInformation.ChipType", StrHWInfoChipType);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: WriteHWInfoStr for StrHWInfoChipType failed with Status: 0x%016llX", Status);
+        debug("[WARN]: WriteHWInfoStr for StrHWInfoChipType failed with Status: 0x%08lX", Status);
         return Status;
     }
     Status = WriteHWInfoStr(DevInstRegKeyHandle, L"HardwareInformation.DacType", StrHWInfoDacType);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: WriteHWInfoStr for StrHWInfoDacType failed with Status: 0x%016llX", Status);
+        debug("[WARN]: WriteHWInfoStr for StrHWInfoDacType failed with Status: 0x%08lX", Status);
         return Status;
     }
     Status = WriteHWInfoStr(DevInstRegKeyHandle, L"HardwareInformation.AdapterString", StrHWInfoAdapterString);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: WriteHWInfoStr for StrHWInfoAdapterString failed with Status: 0x%016llX", Status);
+        debug("[WARN]: WriteHWInfoStr for StrHWInfoAdapterString failed with Status: 0x%08lX", Status);
         return Status;
     }
     Status = WriteHWInfoStr(DevInstRegKeyHandle, L"HardwareInformation.BiosString", StrHWInfoBiosString);
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: WriteHWInfoStr for StrHWInfoBiosString failed with Status: 0x%016llX", Status);
+        debug("[WARN]: WriteHWInfoStr for StrHWInfoBiosString failed with Status: 0x%08lX", Status);
         return Status;
     }
     // MemorySize is a ULONG, unlike the others which are all strings
@@ -637,10 +563,10 @@ NTSTATUS BASIC_DISPLAY_DRIVER::RegisterHWInfo()
                            sizeof(MemorySize));
     if (!NT_SUCCESS(Status))
     {
-        debug("[WARN]: ZwSetValueKey for MemorySize failed with Status: 0x%016llX", Status);
+        debug("[WARN]: ZwSetValueKey for MemorySize failed with Status: 0x%08lX", Status);
         return Status;
     }
-    debug("[INFO]: Current Status: 0x%016llX", Status);
+    debug("[INFO]: Current Status: 0x%08lX", Status);
     return Status;
 }
 

@@ -1,2 +1,2 @@
-PlatformToolSet=WindowsKernelModeDriver10.0:VCToolArchitecture=Native32Bit:VCToolsVersion=14.28.29910:TargetPlatformVersion=10.0.19041.0:
-Release|ARM64|C:\Users\Alastair\Documents\GitHub\pi4bdd\KMDOD\|
+PlatformToolSet=WindowsKernelModeDriver10.0:VCToolArchitecture=Native32Bit:VCToolsVersion=14.29.30133:TargetPlatformVersion=10.0.19041.0:
+Release|ARM64|C:\Users\Alastair\Documents\GitHub\pi4bdd5\KMDOD\|

@@ -6,6 +6,16 @@ Build output available at: https://github.com/TheMindVirus/pi4bdd/tree/main/KMDO
 Changing firmware and drivers may make your OS fail to boot. \
 Please use with caution! (See below for Troubleshooting)
 
+: Issue - CPU Frequency Scaling to Save Power can have the negative side effect of
+          destroying communication between the OS and the peripherals it controls.
+Please refer to https://github.com/themindvirus/pi4bdd/blob/pi4bdd5-dev/WoR-maxcpu.txt for more information.
+
+## 800x600 on Second Display
+![screenshot](https://github.com/themindvirus/pi4bdd/blob/pi4bdd5-dev/screenshot.png)
+
+## Single Display Fail
+![singledisplayfail](https://github.com/themindvirus/pi4bdd/blob/pi4bdd5-dev/singledisplayfail.jpg)
+
 ## Known Issues
  * May cause failure to boot for a variety of reasons (and may need multiple restarts)
  * Black Screen at LogonUI on Windows (which may eventually resolve itself over time)
